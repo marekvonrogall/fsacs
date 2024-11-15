@@ -47,7 +47,12 @@
 ### 1.4 Diagramme
 #### UseCase
 
-![UseCase](https://github.com/user-attachments/assets/3b5b1d62-d6fa-48c3-b837-55000eb945bd)
+![UseCase](https://github.com/user-attachments/assets/d491114a-9eb1-49f0-bac9-1116f65da5b0)
+
+#### Architecture
+
+![Architecture](https://github.com/user-attachments/assets/19467aaa-b6cb-42d8-a7b1-32a2de122610)
+
 
 
 ## 2 Planen
