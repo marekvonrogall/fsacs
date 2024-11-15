@@ -61,7 +61,7 @@ Total:
 
 ## 3 Entscheiden
 
-✍️ Dokumentieren Sie hier Ihre Entscheidungen und Annahmen, die Sie im Bezug auf Ihre User Stories und die Implementierung getroffen haben.
+Wir haben uns entschieden nach Planung (Arbeitspakete) vorzugehen.
 
 ## 4 Realisieren
 
