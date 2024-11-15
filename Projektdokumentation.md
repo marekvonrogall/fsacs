@@ -29,16 +29,20 @@
 | 7    |   Muss              | funktional     | Als Entwickler möchte ich, dass die Kommunikation zwischen Server und Client über einen Websocket läuft, um die Kommunikation zu ermöglichen. |
 
 
-✍️ Jede User Story hat eine ganzzahlige Nummer (1, 2, 3 etc.), eine Verbindlichkeit (Muss oder Kann?), und einen Typ (Funktional, Qualität, Rand). Die User Story selber hat folgende Form: *Als ein 🤷‍♂️ möchte ich 🤷‍♂️, damit 🤷‍♂️*.
 
 ### 1.3 Testfälle
 
 | TC-№ | Ausgangslage | Eingabe | Erwartete Ausgabe |
 | ---- | ------------ | ------- | ----------------- |
-| 1.1  |              |         |                   |
-| ...  |              |         |                   |
+| 1.1  |Zwei Nutzer haben sich mit dem Server verbunden und wollen eine Datei austauschen.| - |Datei wird übertragen.|
+| 2.1  |Benutzer loggt sich ein.| - |IP wird in der Datenbank gespeichert.|
+| 3.1  |Benutzer loggt sich aus.| - |Benutzer wird aus der Datenbank gelöscht.|
+| 4.1  |Benutzer ist eingeloggt.| - |Benutzer wird anderen Benutzern als Online angezeigt.|
+| 5.1  |Anderer Benutzer schickt eine Anfrage, um eine Datei zu schicken.| Anfrage wird angenommen.|Datei wird übertragen.|
+| 6.1  |Anderer Benutzer schickt eine Anfrage, um eine Datei zu schicken.| Anfrage wird abgelehnt.|Datei wird nicht übertragen.|
 
-✍️ Die Nummer hat das Format `N.m`, wobei `N` die Nummer der User Story ist, die der Testfall abdeckt, und `m` von `1` an nach oben gezählt. Beispiel: Der dritte Testfall, der die zweite User Story abdeckt, hat also die Nummer `2.3`.
+
+
 
 ### 1.4 Diagramme
 #### UseCase
