@@ -48,10 +48,22 @@
 
 ## 2 Planen
 
-| AP-№ | Frist | Zuständig | Beschreibung | geplante Zeit |
+| AP-№ | Frist | Zuständig | Beschreibung | geplante Zeit (h) |
 | ---- | ----- | --------- | ------------ | ------------- |
-| 1.A  |       |           |              |               |
-| ...  |       |           |              |               |
+| 1.A  |  22/11/24     |      Stefan, Marek     |   Implementierung der Peer-to-Peer-Verbindung in C# für den Dateitransfer zwischen zwei Clients.           |       7        |
+| 1.B  |  29/11/24     |      Stefan, Marek     |   GUI Erstellen und Integration der Peer-to-Peer-Verbindung in das GUI.           |       2        |
+| 2.A  |  15/11/24     |      Manuel, Pascal    |   Einrichtung der Datenbank für die Speicherung der IP-Adresse beim Registrieren des Clients.           |      4         |
+| 2.B  |  29/11/24     |      Manuel, Pascal     |   Entwicklung des Anmelde-Services für die Registrierung und Speicherung der IP.           |      2         |
+| 3.A  |  29/11/24     |      Manuel, Pascal     |   Erweiterung des Anmelde-Services: IP-Adresse des Clients bei Abmeldung oder Verbindungsverlust entfernen.           |      2         |
+| 4.A  |  06/12/24     |      Manuel, Pascal    |   Implementierung des BenutzerAusgabe-Services: Bereitstellung verfügbarer Clients mit IP-Adressen.           |      2         |
+| 4.B  |  13/12/24     |      Manuel, Pascal    |   Entwicklung des Vermittler-Services: Weiterleitung der IP-Adressen (& Dateiname) zwischen Clients.           |      4         |
+| 4.C  |  13/12/24     |      Stefan, Marek     |   "Anklopfen" implementieren (Nachricht an den Vermittler-Service).           |      2         |
+| 5.A  |  06/12/24     |      Stefan, Marek     |   Implementierung der Logik zur Annahme von Dateiübertragungen im Client (+ Speicherung der Datei).          |      2         |
+| 6.A  |  06/12/24     |      Stefan, Marek     |   Implementierung der Logik zur Ablehnung von Dateiübertragungen im Client.           |      1         |
+| 7.A  |  22/11/24     |      Manuel, Pascal    |   Implementierung des API-Gateways und WebSocket-Support für die Kommunikation zwischen Client und Server. |      4         |
+| 7.A  |  29/11/24     |      Stefan, Marek     |   Implementierung der WebSocket-Verbindung beim Client für die Kommunikation zwischen Client und Server.           |      2         |
+| 7.B  |  13/12/24     |      Stefan, Marek     |   Anmelden / Abmelden beim Server beim Client implementieren.          |      2         |
+| 7.C  |  06/12/24     |      Stefan, Marek     |   Annahme des Adressbuches (Benutzerausgabe-Service) beim Client implementieren.          |      2         |
 
 Total: 
 
