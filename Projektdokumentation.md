@@ -20,11 +20,11 @@
 
 | US-№ | Verbindlichkeit | Typ  | Beschreibung                       |
 | ---- | --------------- | ---- | ---------------------------------- |
-| 1    |   Muss              | funktional     | Als Benutzer möchte ich, dass ich Dateien mit einem anderen Computer austauschen kann, |
+| 1    |   Muss              | funktional     | Als Benutzer möchte ich, dass ich Dateien mit einem anderen Computer austauschen kann. |
 | 2    |    Muss             | funktional     | Als Entwickler möchte ich, dass die IP-Adresse in einer Datenbank gespeichert wird, sobald der Benutzer sich registriert, um diese anschliessend zu verwenden.  |
 | 3    |   Muss              | funktional     | Als Entwickler möchte ich, dass die IP-Adresse wieder entfernt wird, sobald der Benutzer das Programm schliesst, damit die Datenbank nicht unnötig gefüllt ist. |
 | 4    |   Muss              | funktional     | Als Benutzer möchte ich, dass ich die IP-Adressen über einen Vermittler erhalte, um Dateien empfangen zu können. |
-| 5    |   Muss              | funktional     | Als Benutzer möchte ich, dass ich die Datenübertragung annehmen, um die Datei zu erhalten. |
+| 5    |   Muss              | funktional     | Als Benutzer möchte ich, dass ich die Datenübertragung annehmen muss, um die Datei zu erhalten. |
 | 6    |   Muss              | funktional     | Als Benutzer möchte ich, dass ich die Datenübertragung verweigern kann, um zu verhindern, dass ich ungewollte Dateien erhalte. |
 | 7    |   Muss              | funktional     | Als Entwickler möchte ich, dass die Kommunikation zwischen Server und Client über einen Websocket läuft, um die Kommunikation zu ermöglichen. |
 
