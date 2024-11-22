@@ -1,60 +1,83 @@
 ﻿using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Net;
-using System.Collections.Generic;
 using System;
 using System.IO;
+using Microsoft.Win32;
 
 namespace FSAClient.Classes
 {
     public class Listener
     {
-        
+        private TcpListener listener;
+
         public async void Listen()
         {
-            IPAddress localIP = UserData.LocalIP;
-            int localPort = UserData.LocalPort;
+            listener = new TcpListener(UserData.LocalIP, UserData.LocalPort);
+            await Task.Run(ListenForNetworkStream);
+        }
 
-            TcpListener listener = new TcpListener(localIP, localPort);
-            listener.Start();
-
-            MessageBox.Show($"Listening on {localIP}:{localPort}");
-
-            await Task.Run(() =>
+        private void ListenForNetworkStream()
+        {
+            try
             {
-                try
-                {
-
-                
+                listener.Start();
                 TcpClient client = listener.AcceptTcpClient();
 
-                
                 NetworkStream stream = client.GetStream();
-                    byte[] sizeBuffer = new byte[4];
+                byte[] sizeBuffer = new byte[4];
 
-                    stream.Read(sizeBuffer, 0, 4);
-                    int fullDataSize = BitConverter.ToInt32(sizeBuffer, 0);
-                    byte[] fullData = new byte[fullDataSize];
-                    int bytesRead = stream.Read(fullData, 0, fullData.Length);
+                stream.Read(sizeBuffer, 0, 4);
+                int fullDataSize = BitConverter.ToInt32(sizeBuffer, 0);
+                byte[] fullData = new byte[fullDataSize];
+                int bytesRead = stream.Read(fullData, 0, fullData.Length);
 
-                    int fileNameLength = BitConverter.ToInt32(fullData, 0);
+                int fileNameLength = BitConverter.ToInt32(fullData, 0);
                 string fileName = System.Text.Encoding.ASCII.GetString(fullData, 4, fileNameLength);
                 byte[] fileData = new byte[fullData.Length - 4 - fileNameLength];
 
                 Array.Copy(fullData, 4 + fileNameLength, fileData, 0, fileData.Length);
 
-                File.WriteAllBytes(fileName, fileData); //Speicherort muss noch geändert werden.
+                SaveFile(fileName, fileData);
+                listener.Stop();
 
-                MessageBox.Show("Remote client received Data!");
+                MessageBox.Show("Listener stopped!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
-                    listener.Stop();
+        private void SaveFile(string fileName, byte[] fileData)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Title = "Save File As",
+                Filter = "All Files|*.*",
+                DefaultExt = Path.GetExtension(fileName),
+                FileName = fileName
+            };
+
+            bool? result = saveFileDialog.ShowDialog();
+            if (result == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                try
+                {
+                    File.WriteAllBytes(filePath, fileData);
+                    MessageBox.Show($"File saved successfully to {filePath}");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show($"Error saving file: {ex.Message}");
                 }
-            });
+            }
+            else
+            {
+                MessageBox.Show("Save operation canceled.");
+            }
         }
     }
 }
