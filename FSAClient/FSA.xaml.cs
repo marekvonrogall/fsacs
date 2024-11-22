@@ -1,5 +1,7 @@
 ﻿using FSAClient.Classes;
+using Microsoft.Win32;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,7 +38,7 @@ namespace FSAClient
             IPAddress serverResponsePublicIP = UserData.PublicIP;
             int serverResponsePublicPort = UserData.PublicPort;
 
-            client.EstablishConnection(serverResponsePublicPort, serverResponsePublicIP);
+            client.SendData(serverResponsePublicPort, serverResponsePublicIP);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -54,6 +56,9 @@ namespace FSAClient
             }
         }
 
+        
+
+        
         private List<AvailableClient> GetAvailableClients()
         {
             //ACTUALLY RETRIEVE CLIENT LIST FROM SERVER HERE AS "LIST<AVAILABLECLIENT>"
