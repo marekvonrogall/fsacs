@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Sockets;
-using System.Threading.Tasks;
+﻿using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using FSAClient.Classes;
@@ -38,6 +34,16 @@ namespace FSAClient
         private void ButtonFinishSetup_Click(object sender, RoutedEventArgs e)
         {
             if(UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text, TextBoxPublicIP.Text, TextBoxPublicPort.Text))
+            {
+                var newPage = new FSA();
+                MainWindow.Instance.NavigateToPage(newPage);
+            }
+            else { MessageBox.Show("Ungültige Eingaben erkannt.", "Error"); }
+        }
+
+        private void LabelLocalMode_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text)) //Use local IP/Port as public IP/Port
             {
                 var newPage = new FSA();
                 MainWindow.Instance.NavigateToPage(newPage);
