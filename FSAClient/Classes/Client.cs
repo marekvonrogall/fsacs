@@ -30,17 +30,23 @@ namespace FSAClient.Classes
                         byte[] fileData = File.ReadAllBytes(filePath);
                         byte[] fileNameData = System.Text.Encoding.ASCII.GetBytes(Path.GetFileName(filePath));
                         byte[] fileNameLength = BitConverter.GetBytes(fileNameData.Length);
-
                         byte[] clientData = new byte[4 + fileNameData.Length + fileData.Length];
+                        byte[] fullClientData = new byte[4 + clientData.Length];
+                        byte[] totalSize = BitConverter.GetBytes(clientData.Length);
 
+                        
                         fileNameLength.CopyTo(clientData, 0);
                         fileNameData.CopyTo(clientData, 4);
                         fileData.CopyTo(clientData, 4 + fileNameData.Length);
+                        totalSize.CopyTo(fullClientData, 0);
+                        clientData.CopyTo(fullClientData, 4);
+
+
 
                         TcpClient client = new TcpClient();
                         client.Connect(publicIP, publicPort);
                         NetworkStream stream = client.GetStream();
-                        stream.Write(clientData, 0, clientData.Length);
+                        stream.Write(fullClientData, 0, fullClientData.Length);
                         MessageBox.Show("Data sent to remote client!");
                     }
                     catch (Exception ex)
