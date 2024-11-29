@@ -11,7 +11,6 @@
     <Grid Background="#FFE6EFED">
         <Label Content="Hallo!" HorizontalAlignment="Center" Margin="0,32,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="22" FontWeight="Bold"/>
         <Label Content="Um eine Peer to Peer Verbindung zu ermöglichen, benötigen wir Ihre öffentliche IP-Adresse &amp; Port.&#xA;(Möglicherweise müssen Sie in den Router-Einstellungen den unten angegebenen Port freigeben.)" HorizontalAlignment="Center" Margin="0,88,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI"/>
-        <Label x:Name="LabelLocalMode" Content="&gt; Setup abschliessen, jedoch FSA innerhalb eines lokalen Netzwerks verwenden" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="109,0,0,34" FontFamily="Microsoft YaHei UI" Foreground="#FF0F09D2" Cursor="Hand" MouseLeftButtonUp="LabelLocalMode_Click"/>
         <TextBox x:Name="TextBoxPublicIP" HorizontalAlignment="Left" Margin="110,174,0,0" TextWrapping="Wrap" Text="---.---.---.---" VerticalAlignment="Top" Width="260"/>
         <TextBox x:Name="TextBoxPublicPort" HorizontalAlignment="Left" Margin="400,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290"/>
         <Label Content="Öffentliche IP-Adresse:" HorizontalAlignment="Left" Margin="109,148,0,0" VerticalAlignment="Top" Width="262"/>
@@ -22,7 +21,8 @@
         <TextBox x:Name="TextBoxLocalPort" HorizontalAlignment="Left" Margin="400,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" Text="5030"/>
         <Button x:Name="ButtonFinishSetup" Content="Setup Abschliessen" HorizontalAlignment="Center" Margin="10,329,0,0" VerticalAlignment="Top" Width="584" Click="ButtonFinishSetup_Click"/>
         <Label Content="Client-Name:" HorizontalAlignment="Left" Margin="110,282,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TextBoxName" HorizontalAlignment="Left" Margin="209,286,0,0" TextWrapping="Wrap" Text="Unnamed Client" VerticalAlignment="Top" Width="481"/>
+        <TextBox x:Name="TextBoxName" HorizontalAlignment="Left" Margin="209,286,0,0" TextWrapping="Wrap" Text="Unnamed Client" VerticalAlignment="Top" Width="336"/>
+        <CheckBox x:Name="CheckBoxLocalMode" Content="Loklales Netzwerk" HorizontalAlignment="Left" Margin="575,287,0,0" VerticalAlignment="Top" Checked="CheckBoxLocalMode_Checked" Unchecked="CheckBoxLocalMode_Unchecked"/>
 
     </Grid>
 </Page>

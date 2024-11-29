@@ -33,6 +33,12 @@ namespace FSAClient
 
         private void ButtonFinishSetup_Click(object sender, RoutedEventArgs e)
         {
+            if (CheckBoxLocalMode.IsChecked == true)
+            {
+                TextBoxPublicIP.Text = TextBoxLocalIP.Text;
+                TextBoxPublicPort.Text = TextBoxLocalPort.Text;
+            }
+
             if(UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text, TextBoxPublicIP.Text, TextBoxPublicPort.Text))
             {
                 var newPage = new FSA();
@@ -41,14 +47,16 @@ namespace FSAClient
             else { MessageBox.Show("Ungültige Eingaben erkannt.", "Error"); }
         }
 
-        private void LabelLocalMode_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void CheckBoxLocalMode_Checked(object sender, RoutedEventArgs e)
         {
-            if (UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text)) //Use local IP/Port as public IP/Port
-            {
-                var newPage = new FSA();
-                MainWindow.Instance.NavigateToPage(newPage);
-            }
-            else { MessageBox.Show("Ungültige Eingaben erkannt.", "Error"); }
+            TextBoxPublicIP.IsEnabled = false;
+            TextBoxPublicPort.IsEnabled = false;
+        }
+
+        private void CheckBoxLocalMode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TextBoxPublicIP.IsEnabled = true;
+            TextBoxPublicPort.IsEnabled = true;
         }
     }
 }
