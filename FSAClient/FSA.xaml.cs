@@ -11,6 +11,7 @@ namespace FSAClient
     /// </summary>
     public partial class FSA : Page
     {
+        private ServerCommunication serverCommunication = new ServerCommunication("ws://link-to-webserver");
         private IPServices iPServices = new IPServices();
         private Listener listener = new Listener();
         private Client client = new Client();
@@ -24,6 +25,7 @@ namespace FSAClient
             InitializeComponent();
             AvailableClients = GetAvailableClients();
             ClientsListBox.ItemsSource = AvailableClients;
+            serverCommunication.RegisterClient();
         }
 
         private void ButtonEstablishConnection_Click(object sender, RoutedEventArgs e)
