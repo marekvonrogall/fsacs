@@ -11,21 +11,28 @@ namespace FSAClient
     /// </summary>
     public partial class FSA : Page
     {
-        private ServerCommunication serverCommunication = new ServerCommunication("ws://link-to-webserver");
+        private ServerCommunication serverCommunication;
         private IPServices iPServices = new IPServices();
         private Listener listener = new Listener();
         private Client client = new Client();
 
-        public record AvailableClient(int Id, string Name);
         public AvailableClient selectedClient;
         public List<AvailableClient> AvailableClients;
 
-        public FSA()
+        public FSA(string externalServerAddress)
         {
             InitializeComponent();
-            AvailableClients = GetAvailableClients();
-            ClientsListBox.ItemsSource = AvailableClients;
+
+            serverCommunication = new ServerCommunication(externalServerAddress);
             serverCommunication.RegisterClient();
+
+            PopulateClientList();
+        }
+
+        private void PopulateClientList()
+        {
+            AvailableClients = serverCommunication.RetreiveClients();
+            ClientsListBox.ItemsSource = AvailableClients;
         }
 
         private void ButtonEstablishConnection_Click(object sender, RoutedEventArgs e)
@@ -54,21 +61,6 @@ namespace FSAClient
                 LabelSelectedClientName.Content = "Selected Client: " + selectedClient.Name;
                 LabelSelectedClientID.Content = "ID: " + selectedClient.Id;
             }
-        }
-
-        private List<AvailableClient> GetAvailableClients()
-        {
-            //ACTUALLY RETRIEVE CLIENT LIST FROM SERVER HERE AS "LIST<AVAILABLECLIENT>"
-
-            //FOR TESTING PURPOSES GENERATED CLIENTS:
-            List<AvailableClient> clients = new List<AvailableClient>
-            {
-                new AvailableClient(232311, "Marek's Desktop"),
-                new AvailableClient(144432, "Pascal"),
-                new AvailableClient(847319, "Stefan H. Jesenko")
-            };
-
-            return clients;
         }
     }
 }

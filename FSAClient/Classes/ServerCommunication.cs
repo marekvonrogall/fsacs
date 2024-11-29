@@ -30,5 +30,17 @@ namespace FSAClient.Classes
 
             return userId;
         }
+
+        public List<AvailableClient> RetreiveClients()
+        {
+            //SAMPLE DATA: ACTUALLY RETREIVE DATA FROM SERVER HERE
+            List<AvailableClient> clients = new List<AvailableClient>
+            {
+                new AvailableClient(232311, "Marek's Desktop"),
+                new AvailableClient(144432, "Pascal"),
+                new AvailableClient(847319, "Stefan H. Jesenko")
+            };
+            return clients;
+        }
     }
 }

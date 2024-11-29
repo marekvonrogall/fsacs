@@ -41,7 +41,7 @@ namespace FSAClient
 
             if(UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text, TextBoxPublicIP.Text, TextBoxPublicPort.Text))
             {
-                var newPage = new FSA();
+                var newPage = new FSA(TextBoxServerAddress.Text);
                 MainWindow.Instance.NavigateToPage(newPage);
             }
             else { MessageBox.Show("Ungültige Eingaben erkannt.", "Error"); }
