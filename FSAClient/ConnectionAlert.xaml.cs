@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using FSAClient.Classes;
 
 namespace FSAClient
 {
@@ -20,15 +10,6 @@ namespace FSAClient
     /// </summary>
     public partial class ConnectionAlert : Window
     {
-        public class ConnectionAlertData
-        {
-            public string UserName { get; set; }
-            public int UserId { get; set; }
-            public string IpAddress { get; set; }
-            public int Port { get; set; }
-            public string FileName { get; set; }
-            public string FileSize { get; set; }
-        }
         ConnectionAlertData IncomingConnection;
         public ConnectionAlert(string serializedConnectionAlert)
         {

@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.ComponentModel;
+using FSAClient.Classes;
 using System.Text.Json;
 
 namespace FSAClient
@@ -19,14 +19,16 @@ namespace FSAClient
             InitializeComponent();
             Instance = this;
             NavigateToPage(new Setup());
-            
-            ConnectionAlert test =new ConnectionAlert(CreateSerializedString());
+
+            //CONNECTION ALERT TEST
+            ConnectionAlert test = new ConnectionAlert(CreateSerializedString());
             test.Show();
         }
 
+        //SAMPLE DATA FOR TESTING PURPOSES
         public string CreateSerializedString()
         {
-            ConnectionAlertData1 data = new ConnectionAlertData1
+            ConnectionAlertData data = new ConnectionAlertData
             {
                 UserName = "Manuel",
                 UserId = 1,
@@ -37,15 +39,7 @@ namespace FSAClient
             };
            return  JsonSerializer.Serialize(data);
         }
-        public class ConnectionAlertData1
-        {
-            public string UserName { get; set; }
-            public int UserId { get; set; }
-            public string IpAddress { get; set; }
-            public int Port { get; set; }
-            public string FileName { get; set; }
-            public string FileSize { get; set; }
-        }
+
         public void NavigateToPage(Page page)
         {
             MainFrame.Navigate(page);
