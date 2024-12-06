@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using FSAClient.Classes;
+using WebSocketSharp;
 
 namespace FSAClient
 {
@@ -12,10 +13,12 @@ namespace FSAClient
     {
         private IPServices iPService = new IPServices();
 
+        WebSocketSharp.WebSocket ws;
         public Setup()
         {
             InitializeComponent();
             GetClientInfo();
+            
         }
 
         private async void GetClientInfo()

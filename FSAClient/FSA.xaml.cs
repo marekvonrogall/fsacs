@@ -1,8 +1,10 @@
 ﻿using FSAClient.Classes;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using WebSocketSharp;
 
 namespace FSAClient
 {
@@ -12,18 +14,18 @@ namespace FSAClient
     public partial class FSA : Page
     {
         private ServerCommunication serverCommunication;
-        private IPServices iPServices = new IPServices();
-        private Listener listener = new Listener();
+       
+        
         private Client client = new Client();
 
         public AvailableClient selectedClient;
-        
+        WebSocket ws;
 
         public FSA(string externalServerAddress)
         {
             InitializeComponent();
 
-            serverCommunication = new ServerCommunication(externalServerAddress);
+            serverCommunication = new ServerCommunication(externalServerAddress, ws);
             serverCommunication.RegisterClient();
 
             PopulateClientList();
@@ -33,13 +35,15 @@ namespace FSAClient
         {
             ClientsListBox.ItemsSource = serverCommunication.AvailableClients;
         }
-
+        record RequestData (int UserId, int SenderId, string FileName, string FileSize);
         private void ButtonEstablishConnection_Click(object sender, RoutedEventArgs e)
         {
-            //SEND selectedClient TO SERVER
-
-            //GET RESPONSE FROM SERVER WITH IP_ADDRESS:PORT OF selectedClient
-
+            client.SelectFile();    
+            RequestData request = new RequestData(UserData.UserId, selectedClient.Id, client.FileName, client.FileSize);
+            string serializedrequest = JsonSerializer.Serialize(request);
+            string message = $"FileSendRequest;{serializedrequest}";
+            
+          
             //FOR TESTING PURPOSES ONLY
             IPAddress serverResponsePublicIP = UserData.PublicIP;
             int serverResponsePublicPort = UserData.PublicPort;
@@ -47,10 +51,7 @@ namespace FSAClient
             client.SendData(serverResponsePublicPort, serverResponsePublicIP);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            listener.Listen();
-        }
+       
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -13,23 +13,23 @@ namespace FSAClient.Classes
 
       
         public List<AvailableClient> AvailableClients { get; private set; }
-        private string ExternalServerAddress { get; set; }
-
         public record RegisterData(string Name, string IpAddress, int Port);
-
-        public ServerCommunication(string externalServerAddress)
-        {
-            ExternalServerAddress = externalServerAddress;
-        }
         WebSocket ws;
+        public ServerCommunication(string externalServerAddress, WebSocket webSocket)
+        {
+            
+            webSocket = new WebSocket(externalServerAddress);
+            ws = webSocket;
+        }
+        
 
 
         //establish connection to server
 
         public void RegisterClient()
         {
-            //WEBSOCKET TRANSMIT DATA AS STRING
-            ws = new WebSocket(ExternalServerAddress);
+           
+            
             ws.Connect();   
 
 
@@ -42,6 +42,8 @@ namespace FSAClient.Classes
 
             //SEND MESSAGE TO SERVER
         }
+
+        
 
         public void RetrieveAvailableClients(string serializedClients)
         {
@@ -67,11 +69,10 @@ namespace FSAClient.Classes
                     RetrieveAvailableClients(message[1]);
                     break;
                 case "IncomingRequest":
-
+                    ConnectionAlert incomingRequest = new ConnectionAlert(message[1], ws);
+                    incomingRequest.Show();
                     break;
-                case "RequestResponse":
-
-                    break;
+                
             }
         }
 
