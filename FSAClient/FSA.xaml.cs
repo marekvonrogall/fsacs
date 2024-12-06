@@ -17,7 +17,7 @@ namespace FSAClient
         private Client client = new Client();
 
         public AvailableClient selectedClient;
-        public List<AvailableClient> AvailableClients;
+        
 
         public FSA(string externalServerAddress)
         {
@@ -31,8 +31,7 @@ namespace FSAClient
 
         private void PopulateClientList()
         {
-            AvailableClients = serverCommunication.RetreiveClients();
-            ClientsListBox.ItemsSource = AvailableClients;
+            ClientsListBox.ItemsSource = serverCommunication.AvailableClients;
         }
 
         private void ButtonEstablishConnection_Click(object sender, RoutedEventArgs e)

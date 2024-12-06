@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+using System.Collections.Generic;   
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace FSAClient.Classes
 {
     public class ServerCommunication
     {
+        public List<AvailableClient> AvailableClients { get; private set; }
         private string ExternalServerAddress { get; set; }
+
         public record RegisterData(string Name, string IpAddress, int Port);
 
         public ServerCommunication(string externalServerAddress)
@@ -19,28 +17,32 @@ namespace FSAClient.Classes
             ExternalServerAddress = externalServerAddress;
         }
 
-        public int RegisterClient()
+        //establish connection to server
+
+        public void RegisterClient()
         {
             //WEBSOCKET TRANSMIT DATA AS STRING
             RegisterData registerData = new RegisterData(UserData.Name, UserData.PublicIP.ToString(), UserData.PublicPort);
             string serializedClient = JsonSerializer.Serialize(registerData);
+            string message = $"clientRegistration;{serializedClient}";
 
-            //WEBSOCKET RETURNS USER ID
-            int userId = 1;
-
-            return userId;
+            //SEND MESSAGE TO SERVER
         }
 
-        public List<AvailableClient> RetreiveClients()
+        public void RetrieveAvailableClients()
         {
             //SAMPLE DATA: ACTUALLY RETREIVE DATA FROM SERVER HERE
-            List<AvailableClient> clients = new List<AvailableClient>
+            AvailableClients = new List<AvailableClient>
             {
                 new AvailableClient(232311, "Marek's Desktop"),
                 new AvailableClient(144432, "Pascal"),
                 new AvailableClient(847319, "Stefan H. Jesenko")
             };
-            return clients;
+
+            if(UserData.UserId != 0)
+            {
+                AvailableClients = AvailableClients.FindAll(client => client.Id != UserData.UserId);
+            }
         }
     }
 }
