@@ -2,11 +2,16 @@
 using System.Collections.Generic;   
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Markup;
+using WebSocketSharp;
+
 
 namespace FSAClient.Classes
 {
     public class ServerCommunication
     {
+
+      
         public List<AvailableClient> AvailableClients { get; private set; }
         private string ExternalServerAddress { get; set; }
 
@@ -16,33 +21,59 @@ namespace FSAClient.Classes
         {
             ExternalServerAddress = externalServerAddress;
         }
+        WebSocket ws;
+
 
         //establish connection to server
 
         public void RegisterClient()
         {
             //WEBSOCKET TRANSMIT DATA AS STRING
+            ws = new WebSocket(ExternalServerAddress);
+            ws.Connect();   
+
+
+
+
             RegisterData registerData = new RegisterData(UserData.Name, UserData.PublicIP.ToString(), UserData.PublicPort);
             string serializedClient = JsonSerializer.Serialize(registerData);
             string message = $"clientRegistration;{serializedClient}";
+            ws.Send(message);
 
             //SEND MESSAGE TO SERVER
         }
 
-        public void RetrieveAvailableClients()
+        public void RetrieveAvailableClients(string serializedClients)
         {
-            //SAMPLE DATA: ACTUALLY RETREIVE DATA FROM SERVER HERE
-            AvailableClients = new List<AvailableClient>
-            {
-                new AvailableClient(232311, "Marek's Desktop"),
-                new AvailableClient(144432, "Pascal"),
-                new AvailableClient(847319, "Stefan H. Jesenko")
-            };
+            AvailableClients = JsonSerializer.Deserialize<List<AvailableClient>>(serializedClients);
 
-            if(UserData.UserId != 0)
+
+
+            if (UserData.UserId != 0)
             {
                 AvailableClients = AvailableClients.FindAll(client => client.Id != UserData.UserId);
             }
         }
+
+        private  void Ws_OnMessage(object sender, MessageEventArgs e)
+        {
+            string[] message = e.Data.Split(';');
+            switch (message[0])
+            {
+                case "clientId":
+                    UserData.UserId = int.Parse(message[1]);
+                    break;
+                case "availableClients":
+                    RetrieveAvailableClients(message[1]);
+                    break;
+                case "IncomingRequest":
+
+                    break;
+                case "RequestResponse":
+
+                    break;
+            }
+        }
+
     }
 }

@@ -13,13 +13,13 @@
         <Label Content="Remote client Id:" HorizontalAlignment="Left" Margin="144,140,0,0" VerticalAlignment="Top"/>
         <Label Content="File name:" HorizontalAlignment="Left" Margin="144,192,0,0" VerticalAlignment="Top"/>
         <Label Content="File size:" HorizontalAlignment="Left" Margin="144,218,0,0" VerticalAlignment="Top"/>
-        <Label Content="---" HorizontalAlignment="Left" Margin="267,114,0,0" VerticalAlignment="Top" Width="279"/>
-        <Label Content="---" HorizontalAlignment="Left" Margin="267,140,0,0" VerticalAlignment="Top" Width="279"/>
-        <Label Content="---" HorizontalAlignment="Left" Margin="267,192,0,0" VerticalAlignment="Top" Width="279"/>
-        <Label Content="---" HorizontalAlignment="Left" Margin="267,218,0,0" VerticalAlignment="Top" Width="279"/>
+        <Label Content="{Binding UserName}" HorizontalAlignment="Left" Margin="267,114,0,0" VerticalAlignment="Top" Width="279"/>
+        <Label Content="{Binding UserId}" HorizontalAlignment="Left" Margin="267,140,0,0" VerticalAlignment="Top" Width="279"/>
+        <Label Content="{Binding FileName}" HorizontalAlignment="Left" Margin="267,192,0,0" VerticalAlignment="Top" Width="279"/>
+        <Label Content="{Binding FileSize}" HorizontalAlignment="Left" Margin="267,218,0,0" VerticalAlignment="Top" Width="279"/>
         <Label Content="Never accept unknown connections!" HorizontalAlignment="Center" Margin="0,313,0,0" VerticalAlignment="Top"/>
         <Label Content="Remote client IP:" HorizontalAlignment="Left" Margin="144,166,0,0" VerticalAlignment="Top"/>
-        <Label Content="---:---" HorizontalAlignment="Left" Margin="267,166,0,0" VerticalAlignment="Top" Width="279"/>
+        <Label Content="{Binding IpAddress}" HorizontalAlignment="Left" Margin="267,166,0,0" VerticalAlignment="Top" Width="279"/>
         <Button x:Name="ButtonAcceptConnection" Content="Accept" HorizontalAlignment="Left" Margin="267,282,0,0" VerticalAlignment="Top" Width="101" Click="ButtonAcceptConnection_Click"/>
         <Button x:Name="ButtonDeclineConnection" Content="Decline" HorizontalAlignment="Left" Margin="144,282,0,0" VerticalAlignment="Top" Width="108" Background="#FFF59292" Click="ButtonDeclineConnection_Click"/>
         <CheckBox x:Name="CheckBoxTrustRequest" Content="I trust this connection." HorizontalAlignment="Left" Margin="385,285,0,0" VerticalAlignment="Top" Checked="CheckBoxTrustRequest_Checked" Unchecked="CheckBoxTrustRequest_Unchecked"/>
