@@ -29,6 +29,5 @@
         <Label x:Name="LabelSelectedClientID" Content="ID:" HorizontalAlignment="Left" Margin="590,103,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.785,-0.424"/>
         <Label Content="Actions" HorizontalAlignment="Left" Margin="590,167,0,0" VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-0.134,0.539"/>
         <Button x:Name="ButtonEstablishConnection" Content="Establish Connection" HorizontalAlignment="Left" Margin="590,282,0,0" VerticalAlignment="Top" Width="162" Height="55" Click="ButtonEstablishConnection_Click"/>
-        <Button Content="Listen" HorizontalAlignment="Left" Margin="590,214,0,0" VerticalAlignment="Top" Width="162" Height="56" Click="Button_Click"/>
     </Grid>
 </Page>
