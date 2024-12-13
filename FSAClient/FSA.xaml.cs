@@ -43,11 +43,15 @@ namespace FSAClient
 
         private void ButtonEstablishConnection_Click(object sender, RoutedEventArgs e)
         {
+            client.FileName = null;
             client.SelectFile();
-            RequestData request = new RequestData(UserData.UserId, selectedClient.Id, client.FileName, client.FileSize);
-            string serializedrequest = JsonSerializer.Serialize(request);
-            string message = $"FileSendRequest;{serializedrequest}";
-            ws.Send(message);
+            if (client.FileName != null)
+            {
+                RequestData request = new RequestData(UserData.UserId, selectedClient.Id, client.FileName, client.FileSize);
+                string serializedRequest = JsonSerializer.Serialize(request);
+                string message = $"FileSendRequest;{serializedRequest}";
+                ws.Send(message);
+            }
         }
 
         private void SelectionChanged(object sender, SelectionChangedEventArgs e)

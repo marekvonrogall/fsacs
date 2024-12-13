@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using FSAClient.Classes;
@@ -39,12 +40,20 @@ namespace FSAClient
                 TextBoxPublicPort.Text = TextBoxLocalPort.Text;
             }
 
-            if(UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text, TextBoxPublicIP.Text, TextBoxPublicPort.Text))
+            try
             {
-                var newPage = new FSA(TextBoxServerAddress.Text);
-                MainWindow.Instance.NavigateToPage(newPage);
+                if (UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text,
+                        TextBoxPublicIP.Text, TextBoxPublicPort.Text))
+                {
+                    var newPage = new FSA(TextBoxServerAddress.Text);
+                    MainWindow.Instance.NavigateToPage(newPage);
+                }
+                else throw new Exception();
             }
-            else { MessageBox.Show("Ungültige Eingaben erkannt.", "Error"); }
+            catch
+            {
+                MessageBox.Show("Ungültige Eingaben erkannt.", "Error");
+            }
         }
 
         private void CheckBoxLocalMode_Checked(object sender, RoutedEventArgs e)
