@@ -40,8 +40,6 @@ namespace FSAClient.Classes
 
                 SaveFile(fileName, fileData);
                 listener.Stop();
-
-                MessageBox.Show("Listener stopped!");
             }
             catch (Exception ex)
             {

@@ -37,31 +37,18 @@ namespace FSAClient.Classes
                 fileData.CopyTo(clientData, 4 + fileNameData.Length);
                 totalSize.CopyTo(fullClientData, 0);
                 clientData.CopyTo(fullClientData, 4);
-
-
-                
-                
-
-
-
             }
         }
+
         public async void SendData( int publicPort, IPAddress publicIP)
         {
             await Task.Run(() =>
             {
-                
-
-
-
                 TcpClient client = new TcpClient();
                         client.Connect(publicIP, publicPort);
                         NetworkStream stream = client.GetStream();
                         stream.Write(fullClientData, 0, fullClientData.Length);
                         MessageBox.Show("Data sent to remote client!");
-                    
-                  
-                
             });
         }
     }

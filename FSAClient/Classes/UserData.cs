@@ -6,7 +6,7 @@ namespace FSAClient.Classes
     public static class UserData
     {
         public static string Name { get; private set; }
-        public static int UserId { get; set; } //Retreived from Server
+        public static int UserId { get; set; }
 
         public static IPAddress LocalIP { get; private set; }
         public static int LocalPort { get; private set; }

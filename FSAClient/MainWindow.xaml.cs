@@ -1,13 +1,5 @@
 ﻿using System.Windows;
-using System;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using FSAClient.Classes;
-using System.Text.Json;
-
 
 namespace FSAClient
 {
@@ -20,11 +12,7 @@ namespace FSAClient
             InitializeComponent();
             Instance = this;
             NavigateToPage(new Setup());
-
-            
         }
-
-       
        
         public void NavigateToPage(Page page)
         {

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 using System.Windows;
-using System.Windows.Markup;
 using WebSocketSharp;
-
 
 namespace FSAClient.Classes
 {
@@ -55,21 +52,24 @@ namespace FSAClient.Classes
             {
                 case "ClientId":
                     UserData.UserId = int.Parse(message[1]);
+                    _fsa.UpdateUserID();
                     break;
                 case "AvailableClients":
                     RetrieveAvailableClients(message[1]);
                     break;
                 case "IncomingRequest":
-                    ConnectionAlert incomingRequest = new ConnectionAlert(message[1], ws);
-                    incomingRequest.Show();
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ConnectionAlert incomingRequest = new ConnectionAlert(message[1], ws);
+                        incomingRequest.Show();
+                    });
                     break;
                 case "RequestResponse":
                     RequestResponse requestResponse = JsonSerializer.Deserialize<RequestResponse>(message[1]);
-                    if (requestResponse.Type == "Accepted") _client.SendData(requestResponse.Port, IPAddress.Parse(requestResponse.IPAddress));
+                    if (requestResponse.Type == "accept") _client.SendData(requestResponse.Port, IPAddress.Parse(requestResponse.IPAddress));
                     else MessageBox.Show("Ihre Anfrage wurde abgelehnt!");
                     break;
             }
         }
-
     }
 }
