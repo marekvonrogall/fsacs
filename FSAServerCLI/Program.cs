@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace FSASampleServer
+namespace FSAServerCLI
 {
     internal class Program
     {
-        public static List<AvailableClient> _availableClients = new List<AvailableClient>
-        {
-            new AvailableClient(1, "Pascal"),
-            new AvailableClient(2, "Marek"),
-            new AvailableClient(3, "Stefan"),
-            new AvailableClient(4, "Cyril"),
-            new AvailableClient(5, "Manuel")
-
-        };
+        public static List<AvailableClient> _availableClients = new List<AvailableClient>();
+        public static List<RegisteredClientDetails> _registeredClients = new List<RegisteredClientDetails>();
+        public static int _nextClientId = 1;
 
         static void Main(string[] args)
         {
@@ -32,6 +27,7 @@ namespace FSASampleServer
     public class FSAServerBehavior : WebSocketBehavior
     {
         private static List<FSAServerBehavior> _connectedClients = new List<FSAServerBehavior>();
+        private int _clientId;
 
         protected override void OnOpen()
         {
@@ -48,10 +44,13 @@ namespace FSASampleServer
             {
                 case "ClientRegistration":
                     RegisterData registerData = JsonSerializer.Deserialize<RegisterData>(message[1]);
-                    Console.WriteLine($"Client registered: {registerData.Name}, {registerData.IpAddress}, {registerData.Port}");
+                    _clientId = Program._nextClientId++;
+                    var clientDetails = new RegisteredClientDetails(_clientId, registerData.Name, registerData.IpAddress, registerData.Port);
+                    Program._registeredClients.Add(clientDetails);
+                    UpdateAvailableClients();
 
                     // Send ClientId to the registering client
-                    string clientIdMessage = "ClientId;2";
+                    string clientIdMessage = $"ClientId;{_clientId}";
                     Send(clientIdMessage);
                     Console.WriteLine($"Sent message to client: {clientIdMessage}");
 
@@ -65,7 +64,49 @@ namespace FSASampleServer
                     break;
                 case "FileSendRequest":
                     RequestData fileSendRequest = JsonSerializer.Deserialize<RequestData>(message[1]);
-                    //...
+                    ConnectionAlertData connectionAlertData = new ConnectionAlertData
+                    {
+                        UserName = Program._registeredClients.First(client => client.Id == fileSendRequest.UserId).Name,
+                        UserId = fileSendRequest.UserId,
+                        IpAddress = Program._registeredClients.First(client => client.Id == fileSendRequest.UserId).IpAddress,
+                        Port = Program._registeredClients.First(client => client.Id == fileSendRequest.UserId).Port,
+                        FileName = fileSendRequest.FileName,
+                        FileSize = fileSendRequest.FileSize
+                    };
+                    string connectionAlertMessage = $"IncomingRequest;{JsonSerializer.Serialize(connectionAlertData)}";
+                    foreach (var client in _connectedClients)
+                    {
+                        if (client._clientId == fileSendRequest.SenderId)
+                        {
+                            client.Send(connectionAlertMessage);
+                            Console.WriteLine($"Sent message to client: {connectionAlertMessage}");
+                            break;
+                        }
+                    }
+                    break;
+                case "P2PConnectionResponse":
+                    P2PConnectionData p2pConnectionData = JsonSerializer.Deserialize<P2PConnectionData>(message[1]);
+
+                    RequestResponse requestResponse;
+                    if (p2pConnectionData.answer == "accept")
+                    {
+                        requestResponse = new RequestResponse(p2pConnectionData.answer,
+                            Program._registeredClients.First(client => client.Id == p2pConnectionData.SenderId).IpAddress,
+                            Program._registeredClients.First(client => client.Id == p2pConnectionData.SenderId).Port);
+                    }
+                    else requestResponse = new RequestResponse(p2pConnectionData.answer, null, 0);
+
+                    string p2pRequestResponse = "RequestResponse;" + JsonSerializer.Serialize(requestResponse);
+
+                    foreach (var client in _connectedClients)
+                    {
+                        if (client._clientId == p2pConnectionData.ReceiverId)
+                        {
+                            client.Send(p2pRequestResponse);
+                            Console.WriteLine($"Sent message to client: {p2pRequestResponse}");
+                            break;
+                        }
+                    }
                     break;
             }
         }
@@ -73,12 +114,24 @@ namespace FSASampleServer
         protected override void OnClose(CloseEventArgs e)
         {
             _connectedClients.Remove(this);
+            Program._registeredClients.RemoveAll(client => client.Id == _clientId);
+            UpdateAvailableClients();
             Console.WriteLine("Client disconnected.");
+        }
+
+        private void UpdateAvailableClients()
+        {
+            Program._availableClients = Program._registeredClients
+                .Select(client => new AvailableClient(client.Id, client.Name))
+                .ToList();
         }
     }
 
     public record RegisterData(string Name, string IpAddress, int Port);
-        record RequestData(int UserId, int SenderId, string FileName, string FileSize);
+    public record RequestData(int UserId, int SenderId, string FileName, string FileSize);
+    public record RegisteredClientDetails(int Id, string Name, string IpAddress, int Port);
+    public record P2PConnectionData(int SenderId, int ReceiverId, string answer);
+    record RequestResponse(string Type, string IPAddress, int Port);
 
     public class AvailableClient
     {
