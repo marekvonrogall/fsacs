@@ -14,27 +14,26 @@ namespace FSAClient
     public partial class FSA : Page
     {
         private ServerCommunication serverCommunication;
-       
-        
         private Client client = new Client();
-
         public AvailableClient selectedClient;
         WebSocket ws;
 
         public FSA(string externalServerAddress)
         {
             InitializeComponent();
-
-            serverCommunication = new ServerCommunication(externalServerAddress, ws);
+            ws = new WebSocket(externalServerAddress);
+            serverCommunication = new ServerCommunication(externalServerAddress, ws, client, this);
             serverCommunication.RegisterClient();
-
-            PopulateClientList();
         }
 
-        private void PopulateClientList()
+        public void PopulateClientList()
         {
-            ClientsListBox.ItemsSource = serverCommunication.AvailableClients;
+            ClientsListBox.Dispatcher.Invoke(() => //Dispatcher.Invoke: Vorschlag von ChatGPT (Behebung Fehler: "owned by a different thread")
+            {
+                ClientsListBox.ItemsSource = serverCommunication.AvailableClients;
+            });
         }
+
         record RequestData (int UserId, int SenderId, string FileName, string FileSize);
         private void ButtonEstablishConnection_Click(object sender, RoutedEventArgs e)
         {
@@ -42,13 +41,7 @@ namespace FSAClient
             RequestData request = new RequestData(UserData.UserId, selectedClient.Id, client.FileName, client.FileSize);
             string serializedrequest = JsonSerializer.Serialize(request);
             string message = $"FileSendRequest;{serializedrequest}";
-            
-          
-            //FOR TESTING PURPOSES ONLY
-            IPAddress serverResponsePublicIP = UserData.PublicIP;
-            int serverResponsePublicPort = UserData.PublicPort;
-
-            client.SendData(serverResponsePublicPort, serverResponsePublicIP);
+            ws.Send(message);
         }
 
        

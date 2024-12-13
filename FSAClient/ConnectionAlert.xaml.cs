@@ -41,7 +41,7 @@ namespace FSAClient
             Listener listener = new Listener();
             P2PConnectionData p2PConnectionData = new P2PConnectionData(UserData.UserId, IncomingConnection.UserId, "decline");
             string serializedP2PConnection = JsonSerializer.Serialize(p2PConnectionData);
-            string message = $"p2pdeclined;{serializedP2PConnection}";
+            string message = $"P2PDeclined;{serializedP2PConnection}";
             webSocket.Send(message);
             listener.Listen();
             
@@ -52,7 +52,7 @@ namespace FSAClient
         {
             P2PConnectionData p2PConnectionData = new P2PConnectionData(UserData.UserId, IncomingConnection.UserId, "accept");
             string serializedP2PConnection = JsonSerializer.Serialize(p2PConnectionData);
-            string message = $"p2paccepted;{serializedP2PConnection}";
+            string message = $"P2PAccepted;{serializedP2PConnection}";
             webSocket.Send(message);
         }
     }

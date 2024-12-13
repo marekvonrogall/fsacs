@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;   
+using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Markup;
@@ -10,69 +11,63 @@ namespace FSAClient.Classes
 {
     public class ServerCommunication
     {
-
-      
         public List<AvailableClient> AvailableClients { get; private set; }
         public record RegisterData(string Name, string IpAddress, int Port);
-        WebSocket ws;
-        public ServerCommunication(string externalServerAddress, WebSocket webSocket)
+        private WebSocket ws;
+        private Client _client;
+        private FSA _fsa;
+
+        public ServerCommunication(string externalServerAddress, WebSocket webSocket, Client client, FSA fsa)
         {
-            
-            webSocket = new WebSocket(externalServerAddress);
+            _fsa = fsa;
+            _client = client;
             ws = webSocket;
+            ws.OnMessage += Ws_OnMessage;
         }
-        
-
-
-        //establish connection to server
 
         public void RegisterClient()
         {
-           
-            
-            ws.Connect();   
-
-
-
-
+            ws.Connect();
             RegisterData registerData = new RegisterData(UserData.Name, UserData.PublicIP.ToString(), UserData.PublicPort);
             string serializedClient = JsonSerializer.Serialize(registerData);
-            string message = $"clientRegistration;{serializedClient}";
+            string message = $"ClientRegistration;{serializedClient}";
             ws.Send(message);
-
-            //SEND MESSAGE TO SERVER
         }
-
-        
 
         public void RetrieveAvailableClients(string serializedClients)
         {
             AvailableClients = JsonSerializer.Deserialize<List<AvailableClient>>(serializedClients);
 
-
-
             if (UserData.UserId != 0)
             {
                 AvailableClients = AvailableClients.FindAll(client => client.Id != UserData.UserId);
             }
+
+            _fsa.PopulateClientList();
         }
 
-        private  void Ws_OnMessage(object sender, MessageEventArgs e)
+        record RequestResponse(string Type, string IPAddress, int Port);
+
+        private void Ws_OnMessage(object sender, MessageEventArgs e)
         {
             string[] message = e.Data.Split(';');
             switch (message[0])
             {
-                case "clientId":
+                case "ClientId":
                     UserData.UserId = int.Parse(message[1]);
                     break;
-                case "availableClients":
+                case "AvailableClients":
                     RetrieveAvailableClients(message[1]);
                     break;
                 case "IncomingRequest":
                     ConnectionAlert incomingRequest = new ConnectionAlert(message[1], ws);
                     incomingRequest.Show();
                     break;
-                
+                case "RequestResponse":
+                    RequestResponse requestResponse = JsonSerializer.Deserialize<RequestResponse>(message[1]);
+                    if (requestResponse.Type == "Accepted") _client.SendData(requestResponse.Port, IPAddress.Parse(requestResponse.IPAddress));
+                    else MessageBox.Show("Ihre Anfrage wurde abgelehnt!");
+                    break;
             }
         }
 
