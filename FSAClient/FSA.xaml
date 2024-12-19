@@ -1,0 +1,34 @@
+﻿<Page x:Class="FSAClient.FSA"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:FSAClient"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FSA">
+
+    <Grid x:Name="ButtonStartListener" Background="#FFE6EFED">
+        <ListBox Name="ClientsListBox" Margin="40,51,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="327" Width="518" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Margin="5">
+                        <TextBlock Text="{Binding Id}"
+                                   Foreground="Gray"
+                                   Margin="20,0,0,0"
+                                   DockPanel.Dock="Right"/>
+                        <TextBlock Text="{Binding Name}"
+                                   FontWeight="Bold"/>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Label Content="Available Clients:" HorizontalAlignment="Left" Margin="40,20,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Further Detail" HorizontalAlignment="Left" Margin="590,51,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label x:Name="LabelSelectedClientName" Content="Selected Client:" HorizontalAlignment="Left" Margin="590,77,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="LabelSelectedClientID" Content="ID:" HorizontalAlignment="Left" Margin="590,103,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.785,-0.424"/>
+        <Label Content="Your client:" HorizontalAlignment="Left" Margin="40,383,0,0" VerticalAlignment="Top" FontWeight="Bold" RenderTransformOrigin="-0.134,0.539"/>
+        <Button x:Name="ButtonEstablishConnection" Content="Establish Connection" HorizontalAlignment="Left" Margin="590,323,0,0" VerticalAlignment="Top" Width="162" Height="55" Click="ButtonEstablishConnection_Click"/>
+        <Label x:Name="LabelThisClientInfo" Content="{}{NAME:ID}" HorizontalAlignment="Left" Margin="118,383,0,0" VerticalAlignment="Top" Width="207"/>
+    </Grid>
+</Page>
