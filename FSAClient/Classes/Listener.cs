@@ -30,7 +30,17 @@ namespace FSAClient.Classes
                 stream.Read(sizeBuffer, 0, 4);
                 int fullDataSize = BitConverter.ToInt32(sizeBuffer, 0);
                 byte[] fullData = new byte[fullDataSize];
-                int bytesRead = stream.Read(fullData, 0, fullData.Length);
+                int bytesRead = 0;
+
+                while (bytesRead < fullDataSize)
+                {
+                    int chunkSize = stream.Read(fullData, bytesRead, fullDataSize - bytesRead);
+                    if (chunkSize == 0)
+                    {
+                        throw new Exception("Connection closed before all data was received.");
+                    }
+                    bytesRead += chunkSize;
+                }
 
                 int fileNameLength = BitConverter.ToInt32(fullData, 0);
                 string fileName = System.Text.Encoding.ASCII.GetString(fullData, 4, fileNameLength);
@@ -39,12 +49,12 @@ namespace FSAClient.Classes
                 Array.Copy(fullData, 4 + fileNameLength, fileData, 0, fileData.Length);
 
                 SaveFile(fileName, fileData);
-                listener.Stop();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            listener.Stop();
         }
 
         private void SaveFile(string fileName, byte[] fileData)
