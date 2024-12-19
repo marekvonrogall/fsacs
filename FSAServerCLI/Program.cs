@@ -15,10 +15,12 @@ namespace FSAServerCLI
 
         static void Main(string[] args)
         {
-            var ws = new WebSocketServer("ws://localhost:5000");
+            Console.WriteLine("Enter the host-address and port \"(IP:Port)\": ");
+            string hostAddress = Console.ReadLine();
+            var ws = new WebSocketServer($"ws://{hostAddress}");
             ws.AddWebSocketService<FSAServerBehavior>("/FSAServer");
             ws.Start();
-            Console.WriteLine("Server started at ws://localhost:5000/FSAServer");
+            Console.WriteLine($"Server started at ws://{hostAddress}/FSAServer");
             Console.ReadLine();
             ws.Stop();
         }
