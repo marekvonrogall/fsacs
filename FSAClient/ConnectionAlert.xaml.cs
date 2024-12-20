@@ -40,6 +40,7 @@ namespace FSAClient
             string serializedP2PConnection = JsonSerializer.Serialize(p2pConnectionData);
             string message = $"P2PConnectionResponse;{serializedP2PConnection}";
             webSocket.Send(message);
+            this.Close();
         }
 
         private void ButtonAcceptConnection_Click(object sender, RoutedEventArgs e)

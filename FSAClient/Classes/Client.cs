@@ -42,14 +42,21 @@ namespace FSAClient.Classes
 
         public async void SendData( int publicPort, IPAddress publicIP)
         {
-            await Task.Run(() =>
+            try
             {
-                TcpClient client = new TcpClient();
-                        client.Connect(publicIP, publicPort);
-                        NetworkStream stream = client.GetStream();
-                        stream.Write(fullClientData, 0, fullClientData.Length);
-                        MessageBox.Show("Data sent to remote client!");
-            });
+                await Task.Run(() =>
+                {
+                    TcpClient client = new TcpClient();
+                    client.Connect(publicIP, publicPort);
+                    NetworkStream stream = client.GetStream();
+                    stream.Write(fullClientData, 0, fullClientData.Length);
+                    MessageBox.Show("Data sent to remote client!");
+                });
+            }
+            catch
+            {
+                MessageBox.Show("Fehler bei der Dateiübertragung.", "Error");
+            }
         }
     }
 }
