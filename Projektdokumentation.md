@@ -1,20 +1,21 @@
 # Projekt-Dokumentation
 
-☝️ Alle Text-Stellen, welche mit einem ✍️ beginnen, können Sie löschen, sobald Sie die entsprechende Stellen ausgefüllt haben.
 
-✍️ Ihr Gruppenname und Ihre Nachnamen
+Marek, Pascal, Manuel, Stefan
 
 | Datum | Version | Zusammenfassung                                              |
 | ----- | ------- | ------------------------------------------------------------ |
-|       | 0.0.1   | ✍️ Jedes Mal, wenn Sie an dem Projekt arbeiten, fügen Sie hier eine neue Zeile ein und beschreiben in *einem* Satz, was Sie erreicht haben. |
-|       | ...     |                                                              |
-|       | 1.0.0   |                                                              |
+|08.11.2024| 0.0.1   |Heute haben wir den Projektantrag abgegeben und uns zu potenziellen Möglichkeiten infromiert wie wir das Projekt realisieren können.|
+|15.11.2024| 0.6.1 |Heute haben wir mit dem Programieren angefangen. Wir haben mit den Arbeitspaketen 1.A und 2.A angefangen|
+|22.11.2024| 0.11.5 |Heute war ein sehr produktiver Tag, wir konnten viele Arbeitspakete erledigen, 1.A, 2.A, 2.B, 3.A, 4.B, 5.A ein grossteil der Funktionalität des Clients wurde implementiert.|
+|06.12.2024| 0.12.15 |Heute konnten wir die Arbeitspakete 7.B, 4.D, 5.A erledigen. Wir konnten gut arbeiten.|
+|13.12.2024| 1.1.0|Wir haben heute daran gearbeitet den Server und den Client zu verbinden. Dies hat nicht gut funktioniert, wir hatten mehrere Probleme und wir haben uns dazu entschieden, weil wir nichtmehr so viel Zeit hatten einen kleinen Server zu erstellen der die nötige funktionalität abdeckt, die wir für unsere Applikation benötigen.|
 
 ## 1 Informieren
 
 ### 1.1 Ihr Projekt
 
-✍️ Beschreiben Sie Ihr Projekt in einem griffigen Satz.
+In unserem Projekt erstellen wir eine App um Dateien über Peer to Peer zu Senden, das verbinden der Clients wird mit einem Server geamcht.
 
 ### 1.2 User Stories
 
@@ -75,12 +76,6 @@
 | 7.A  |  22/11/24     |      Manuel, Pascal    |   Implementierung des API-Gateways und WebSocket-Support für die Kommunikation zwischen Client und Server. |      4         |
 | 7.B  |  29/11/24     |      Stefan, Marek     |   Implementierung der WebSocket-Verbindung beim Client für die Kommunikation zwischen Client und Server.           |      2         |
 
-Total: 
-
-✍️ Die Nummer hat das Format `N.m`, wobei `N` die Nummer der User Story ist, auf die sich das Arbeitspaket bezieht, und `m` von `A` an nach oben buchstabiert. Beispiel: Das dritte Arbeitspaket, das die zweite User Story betrifft, hat also die Nummer `2.C`.
-
-✍️ Ein Arbeitspaket sollte etwa 45' für eine Person in Anspruch nehmen. Die totale Anzahl Arbeitspakete sollte etwa Folgendem entsprechen: `Anzahl R-Sitzungen` ╳ `Anzahl Gruppenmitglieder` ╳ `4`. Wenn Sie also zu dritt an einem Projekt arbeiten, für welches zwei R-Sitzungen geplant sind, sollten Sie auf `2` ╳ `3` ╳`4` = `24` Arbeitspakete kommen. Sollten Sie merken, dass Sie hier nicht genügend Arbeitspakte haben, denken Sie sich weitere "Kann"-User Stories für Kapitel 1.2 aus.
-
 ## 3 Entscheiden
 
 Wir haben uns entschieden nach Planung (Arbeitspakete) vorzugehen.
@@ -89,10 +84,18 @@ Wir haben uns entschieden nach Planung (Arbeitspakete) vorzugehen.
 
 | AP-№ | Datum | Zuständig | geplante Zeit | tatsächliche Zeit |
 | ---- | ----- | --------- | ------------- | ----------------- |
-| 1.A  |       |           |               |                   |
-| ...  |       |           |               |                   |
+| 1.A  |22.11.2024|Stefan, Marek|7|5|
+| 1.B  |22.11.2024|Stefan, Marek|2|1|
+| 2.A  |22.11.2024|Pascal, Manuel|4|3|
+| 2.B  |22.11.2024|Pascal, Manuel|2|3|
+| 3.A  |22.11.2024|Pascal, Manuel|2|1|
+| 4.B  |22.11.2024|Stefan, Marek|2|2|
+| 5.A  |22.11.2024|Stefan, Marek|2|1|
+| 7.B  |06.12.2024|Stefan, Marek|2|2|
+| 4.D  |06.12.2024|Stefan, Marek|2|3|
+| 5.A  |06.12.2024|Stefan, Marek|2|2|
+| 4.C  |13.12.2024|Pascal,Manuel|4|6|
 
-✍️ Tragen Sie jedes Mal, wenn Sie ein Arbeitspaket abschließen, hier ein, wie lang Sie effektiv dafür hatten.
 
 ## 5 Kontrollieren
 
@@ -100,11 +103,14 @@ Wir haben uns entschieden nach Planung (Arbeitspakete) vorzugehen.
 
 | TC-№ | Datum | Resultat | Tester |
 | ---- | ----- | -------- | ------ |
-| 1.1  |       |          |        |
-| ...  |       |          |        |
+| 1.1  |20.12.2024|OK|Stefan Jesenko|
+| 2.1  |20.12.2024|NOK|Stefan Jesenko|
+| 3.1  |20.12.2024|NOK|Stefan Jesenko|
+| 4.1  |20.12.2024|OK|Stefan Jesenko|
+| 5.1  |20.12.2024|OK|Stefan Jesenko|
+| 6.1  |20.12.2024|OK|Stefan Jesenko|
 
-✍️ Vergessen Sie nicht, ein Fazit hinzuzufügen, welches das Test-Ergebnis einordnet.
-
+Die Applikation funktioniert so wie geplant, wir konnten aber den Server nicht so umsetzen wie geplant, wegen Zeitgründen wurde eine kleine Version des Servers erstellt, der die funktionalen Aspekte abdeckt, bei dem werden die Daten nicht in einer Datenbank gespeichert, deswegen sind manche Testfälle NOK.
 
 ## 6 Auswerten
 
