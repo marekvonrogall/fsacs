@@ -21,7 +21,7 @@ namespace FSAClient
         {
             InitializeComponent();
             ws = new WebSocket(externalServerAddress);
-            serverCommunication = new ServerCommunication(externalServerAddress, ws, client, this);
+            serverCommunication = new ServerCommunication(ws, client, this);
             serverCommunication.RegisterClient();
         }
 

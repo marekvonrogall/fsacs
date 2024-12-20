@@ -14,7 +14,7 @@ namespace FSAClient.Classes
         private Client _client;
         private FSA _fsa;
 
-        public ServerCommunication(string externalServerAddress, WebSocket webSocket, Client client, FSA fsa)
+        public ServerCommunication(WebSocket webSocket, Client client, FSA fsa)
         {
             _fsa = fsa;
             _client = client;
