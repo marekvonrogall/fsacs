@@ -114,6 +114,9 @@ Die Applikation funktioniert so wie geplant, wir konnten aber den Server nicht s
 
 ## 6 Auswerten
 [Portfolio von Stefan Jesenko](https://portfolio.bbbaden.ch/view/view.php?t=3120b43bcf86994cec78)
-[Protfolio von Pascal Oestrich](https://portfolio.bbbaden.ch/view/view.php?t=e52b88f9a5edc422b625)
+
+[Portfolio von Pascal Oestrich](https://portfolio.bbbaden.ch/view/view.php?t=e52b88f9a5edc422b625)
+
 [Portfolio von Manuel Greub](https://portfolio.bbbaden.ch/view/view.php?t=b4c500fab0a1fd25dca6) 
+
 
