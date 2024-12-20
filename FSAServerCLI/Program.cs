@@ -49,20 +49,14 @@ namespace FSAServerCLI
                     _clientId = Program._nextClientId++;
                     var clientDetails = new RegisteredClientDetails(_clientId, registerData.Name, registerData.IpAddress, registerData.Port);
                     Program._registeredClients.Add(clientDetails);
-                    UpdateAvailableClients();
 
                     // Send ClientId to the registering client
                     string clientIdMessage = $"ClientId;{_clientId}";
                     Send(clientIdMessage);
                     Console.WriteLine($"Sent message to client: {clientIdMessage}");
 
-                    // Send available clients to all connected clients
-                    string availableClientsMessage = "AvailableClients;" + JsonSerializer.Serialize(Program._availableClients);
-                    foreach (var client in _connectedClients)
-                    {
-                        client.Send(availableClientsMessage);
-                        Console.WriteLine($"Sent message to client: {availableClientsMessage}");
-                    }
+                    UpdateAvailableClients();
+
                     break;
                 case "FileSendRequest":
                     RequestData fileSendRequest = JsonSerializer.Deserialize<RequestData>(message[1]);
@@ -126,6 +120,14 @@ namespace FSAServerCLI
             Program._availableClients = Program._registeredClients
                 .Select(client => new AvailableClient(client.Id, client.Name))
                 .ToList();
+
+            // Send available clients to all connected clients
+            string availableClientsMessage = "AvailableClients;" + JsonSerializer.Serialize(Program._availableClients);
+            foreach (var client in _connectedClients)
+            {
+                client.Send(availableClientsMessage);
+                Console.WriteLine($"Sent message to client: {availableClientsMessage}");
+            }
         }
     }
 
