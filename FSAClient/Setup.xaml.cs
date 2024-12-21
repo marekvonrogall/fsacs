@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Controls;
 using FSAClient.Classes;
@@ -12,22 +13,32 @@ namespace FSAClient
     public partial class Setup : Page
     {
         private IPServices iPService = new IPServices();
+        private PortServices portService = new PortServices();
+        private NetworkInterfaces networkInterfaces = new NetworkInterfaces();
 
         public Setup()
         {
             InitializeComponent();
-            GetClientInfo();
+            networkInterfaces.PopulateNetworkInterfaces(ComboBoxNetworkInterfaces);
+            if (ComboBoxNetworkInterfaces.Items.Count != 0)
+            {
+                ComboBoxNetworkInterfaces.SelectedIndex = 0;
+            }
         }
 
-        private async void GetClientInfo()
+        private void NetworkInterfaceChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = (ComboBoxItem)ComboBoxNetworkInterfaces.SelectedItem;
+            NetworkInterfaces ni = (NetworkInterfaces)selectedItem.Tag;
+            GetClientInfo(ni.Address);
+        }
+
+        private async void GetClientInfo(IPAddress ip)
         {
             try
             {
-                IPAddress localIP = iPService.GetLocalIP();
-                IPAddress publicIP = await iPService.GetPublicIP();
-
-                TextBoxLocalIP.Text = localIP.ToString();
-                TextBoxPublicIP.Text = publicIP.ToString();
+                TextBoxLocalIP.Text = ip.ToString();
+                TextBoxLocalPort.Text = portService.GetFreeTcpPort(ip).ToString();
             }
             catch { }
         }
