@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Net;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Windows;
-using System.Windows.Controls;
+using System.Net;
 
-namespace FSAClient.Classes
+namespace FSAServerCLI.Classes
 {
     public class NetworkInterfaces
     {
@@ -13,9 +12,11 @@ namespace FSAClient.Classes
         public string Description { get; set; }
         public IPAddress Address { get; set; }
         public IPAddress BroadcastAddress { get; set; }
+        public List<NetworkInterfaces> AllNetworkInterfaces { get; private set; }
 
-        public void PopulateNetworkInterfaces(ComboBox ComboBoxNetworkInterfaces)
+        public void ListNetworkInterfaces()
         {
+            AllNetworkInterfaces = new List<NetworkInterfaces>();
             foreach (NetworkInterface networkInterface in NetworkInterface.GetAllNetworkInterfaces())
             {
                 if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback) continue;
@@ -36,12 +37,8 @@ namespace FSAClient.Classes
                             Address = ipAddress.Address,
                             BroadcastAddress = broadcastAddress
                         };
-                        var newItem = new ComboBoxItem
-                        {
-                            Content = ($"{ni.Name} - {ni.Description}"),
-                            Tag = ni
-                        };
-                        ComboBoxNetworkInterfaces.Items.Add(newItem);
+                        AllNetworkInterfaces.Add(ni);
+                        Console.WriteLine($"[{AllNetworkInterfaces.Count}]: {ni.Name} - {ni.Description}");
                     }
                 }
             }

@@ -3,50 +3,54 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Navigation;
 
 namespace FSAClient.Classes
 {
     public class UDPBroadcast
     {
-        public async Task<string> LookForServerAsync(IPAddress localAddress)
+        public async Task<string> LookForServerAsync(NetworkInterfaces selectedNetworkInterface)
         {
             try
             {
-                using (UdpClient udpClient = new UdpClient(new IPEndPoint(localAddress, 0)))
+                using (UdpClient udpClient = new UdpClient(new IPEndPoint(selectedNetworkInterface.Address, 0)))
                 {
-                    IPEndPoint endPoint = new IPEndPoint(IPAddress.Broadcast, 17551);
-                    UdpClient listener = new UdpClient(new IPEndPoint(localAddress, 17550));
-                    listener.EnableBroadcast = true;
+                    udpClient.EnableBroadcast = true;
+
+                    IPEndPoint endPoint = new IPEndPoint(selectedNetworkInterface.BroadcastAddress, 17551);
 
                     string message = "DISCOVER_WEBSOCKET_SERVER";
                     byte[] data = Encoding.UTF8.GetBytes(message);
 
                     await udpClient.SendAsync(data, data.Length, endPoint);
 
-                    var receiveTask = listener.ReceiveAsync();
-                    var timeoutTask = Task.Delay(1000);
-
-                    // Wait for either the response or the timeout
-                    var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
-                    listener.Close();
-                    listener.Dispose();
-
-                    if (completedTask == timeoutTask)
+                    using (UdpClient listener = new UdpClient(new IPEndPoint(selectedNetworkInterface.Address, 17550)))
                     {
-                        return "NO_SERVER_FOUND";
-                    }
+                        listener.EnableBroadcast = true;
 
-                    var receivedData = await receiveTask;
-                    string responseMessage = Encoding.UTF8.GetString(receivedData.Buffer);
-                    return responseMessage;
+                        var receiveTask = listener.ReceiveAsync();
+                        var timeoutTask = Task.Delay(1000);
+
+                        var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
+
+                        listener.Close();
+                        listener.Dispose();
+
+                        if (completedTask == timeoutTask)
+                        {
+                            return "NO_SERVER_FOUND";
+                        }
+
+                        var receivedData = await receiveTask;
+                        string responseMessage = Encoding.UTF8.GetString(receivedData.Buffer);
+                        return responseMessage;
+                    }
                 }
             }
-            catch(Exception ex)
+            catch
             {
                 return "NO_SERVER_FOUND";
             }
         }
+
     }
 }

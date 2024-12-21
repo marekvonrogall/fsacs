@@ -49,7 +49,7 @@ namespace FSAClient
                 NetworkInterfaces ni = (NetworkInterfaces)networkInterface.Tag;
                 LabelNetworkInterfaceStatus.Content = $"Checking {ni.Name} - {ni.Description}...";
 
-                string serverAddress = await udpBroadcast.LookForServerAsync(ni.Address);
+                string serverAddress = await udpBroadcast.LookForServerAsync(ni);
                 int freeTCPPort = portService.GetFreeTcpPort(ni.Address);
 
                 if (serverAddress == "NO_SERVER_FOUND" || freeTCPPort == 0)
@@ -63,9 +63,9 @@ namespace FSAClient
             }
         }
 
-        private async void CheckForWebsocket(IPAddress localAddress)
+        private async void CheckForWebsocket(NetworkInterfaces selectedNetworkInterface)
         {
-            string serverAddress = await udpBroadcast.LookForServerAsync(localAddress);
+            string serverAddress = await udpBroadcast.LookForServerAsync(selectedNetworkInterface);
             if (serverAddress != "NO_SERVER_FOUND")
             {
                 TextBoxServerAddress.Text = serverAddress;
@@ -76,7 +76,7 @@ namespace FSAClient
         {
             ComboBoxItem selectedItem = (ComboBoxItem)ComboBoxNetworkInterfaces.SelectedItem;
             NetworkInterfaces ni = (NetworkInterfaces)selectedItem.Tag;
-            CheckForWebsocket(ni.Address);
+            CheckForWebsocket(ni);
             SetClientInfo(ni.Address);
         }
 
