@@ -7,11 +7,18 @@ namespace FSAClient.Classes
     {
         public int GetFreeTcpPort(IPAddress ipAddress)
         {
-            TcpListener listener = new TcpListener(ipAddress, 0);
-            listener.Start();
-            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-            return port;
+            try
+            {
+                TcpListener listener = new TcpListener(ipAddress, 0);
+                listener.Start();
+                int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+                listener.Stop();
+                return port;
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -17,12 +21,43 @@ namespace FSAServerCLI
         {
             Console.WriteLine("Enter the host-address and port \"(IP:Port)\": ");
             string hostAddress = Console.ReadLine();
+
             var ws = new WebSocketServer($"ws://{hostAddress}");
             ws.AddWebSocketService<FSAServerBehavior>("/FSAServer");
             ws.Start();
-            Console.WriteLine($"Server started at ws://{hostAddress}/FSAServer");
+
+            string webSocketAddress = $"ws://{hostAddress}/FSAServer";
+            Console.WriteLine($"Server started at {webSocketAddress}");
+
+            Task.Run(() => StartUdpBroadcastServer(webSocketAddress));
+
             Console.ReadLine();
             ws.Stop();
+        }
+
+        private static async void StartUdpBroadcastServer(string responseMessage)
+        {
+            Console.WriteLine("UDP Server: Listening for UDP discovery requests...");
+            
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Broadcast, 17550);
+            UdpClient listener = new UdpClient(17551);
+
+            while (true)
+            {
+                using (UdpClient udpClient = new UdpClient())
+                {
+                    listener.EnableBroadcast = true;
+
+                    var receivedData = await listener.ReceiveAsync();
+
+                    if (Encoding.UTF8.GetString(receivedData.Buffer) == "DISCOVER_WEBSOCKET_SERVER")
+                    {
+                        byte[] data = Encoding.UTF8.GetBytes(responseMessage);
+                        await udpClient.SendAsync(data, data.Length, endPoint);
+                        Console.WriteLine("Received UDP Request, sent back WebSocket-Address!");
+                    }
+                }
+            }
         }
     }
 
@@ -135,7 +170,7 @@ namespace FSAServerCLI
     public record RequestData(int UserId, int SenderId, string FileName, string FileSize);
     public record RegisteredClientDetails(int Id, string Name, string IpAddress, int Port);
     public record P2PConnectionData(int SenderId, int ReceiverId, string answer);
-    record RequestResponse(string Type, string IPAddress, int Port);
+    public record RequestResponse(string Type, string IPAddress, int Port);
 
     public class AvailableClient
     {

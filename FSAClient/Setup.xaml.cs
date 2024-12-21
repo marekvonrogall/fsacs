@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
-using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using FSAClient.Classes;
@@ -14,15 +15,60 @@ namespace FSAClient
     {
         private PortServices portService = new PortServices();
         private NetworkInterfaces networkInterfaces = new NetworkInterfaces();
-        private bool localMode = true;
+        UDPBroadcast udpBroadcast = new UDPBroadcast();
 
         public Setup()
         {
             InitializeComponent();
+            PopulateNetworkInterfaces();
+        }
+
+        private async void PopulateNetworkInterfaces()
+        {
+            ComboBoxNetworkInterfaces.IsEnabled = false;
             networkInterfaces.PopulateNetworkInterfaces(ComboBoxNetworkInterfaces);
+            await ValidateNetworkInterfaces(ComboBoxNetworkInterfaces.Items);
+
             if (ComboBoxNetworkInterfaces.Items.Count != 0)
             {
                 ComboBoxNetworkInterfaces.SelectedIndex = 0;
+                ComboBoxNetworkInterfaces.IsEnabled = true;
+                LabelNetworkInterfaceStatus.Content = "Server found!";
+            }
+            else
+            {
+                LabelNetworkInterfaceStatus.Content = "There is no server running on your available networks...";
+            }
+        }
+
+        private async Task ValidateNetworkInterfaces(ItemCollection networkInterfaces)
+        {
+            List<ComboBoxItem> itemsToRemove = new List<ComboBoxItem>();
+            foreach (ComboBoxItem networkInterface in networkInterfaces)
+            {
+                NetworkInterfaces ni = (NetworkInterfaces)networkInterface.Tag;
+                LabelNetworkInterfaceStatus.Content = $"Checking {ni.Name} - {ni.Description}...";
+
+                string serverAddress = await udpBroadcast.LookForServerAsync(ni.Address);
+                int freeTCPPort = portService.GetFreeTcpPort(ni.Address);
+
+                if (serverAddress == "NO_SERVER_FOUND" || freeTCPPort == 0)
+                {
+                    itemsToRemove.Add(networkInterface);
+                }
+            }
+            foreach (var item in itemsToRemove)
+            {
+                ComboBoxNetworkInterfaces.Items.Remove(item);
+            }
+        }
+
+        private async void CheckForWebsocket(IPAddress localAddress)
+        {
+            string serverAddress = await udpBroadcast.LookForServerAsync(localAddress);
+            if (serverAddress != "NO_SERVER_FOUND")
+            {
+                TextBoxServerAddress.Text = serverAddress;
             }
         }
 
@@ -30,33 +76,39 @@ namespace FSAClient
         {
             ComboBoxItem selectedItem = (ComboBoxItem)ComboBoxNetworkInterfaces.SelectedItem;
             NetworkInterfaces ni = (NetworkInterfaces)selectedItem.Tag;
-            GetClientInfo(ni.Address);
+            CheckForWebsocket(ni.Address);
+            SetClientInfo(ni.Address);
         }
 
-        private async void GetClientInfo(IPAddress ip)
+        private void SetClientInfo(IPAddress clientIp)
         {
-            try
+            ButtonFinishSetup.IsEnabled = false;
+            int clientTCPPort = portService.GetFreeTcpPort(clientIp);
+            if (clientTCPPort != 0)
             {
-                TextBoxLocalIP.Text = ip.ToString();
-                TextBoxLocalPort.Text = portService.GetFreeTcpPort(ip).ToString();
+                UserData.StoreUserData(TextBoxName.Text, clientIp, clientTCPPort);
+
+                if (UserData.IsValid)
+                {
+                    TextBoxLocalIP.Text = UserData.LocalIP.ToString();
+                    TextBoxLocalPort.Text = UserData.LocalPort.ToString();
+                    ButtonFinishSetup.IsEnabled = true;
+                }
+                else
+                {
+                    TextBoxLocalIP.Text = string.Empty;
+                    TextBoxLocalPort.Text = string.Empty;
+                    MessageBox.Show("Try using a different network interface.", "Network Interface Error");
+                }
             }
-            catch { }
         }
 
         private void ButtonFinishSetup_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (UserData.IsValid)
             {
-                if (UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text))
-                {
-                    var newPage = new FSA(TextBoxServerAddress.Text);
-                    MainWindow.Instance.NavigateToPage(newPage);
-                }
-                else throw new Exception();
-            }
-            catch
-            {
-                MessageBox.Show("Ungültige Eingaben erkannt.", "Error");
+                var newPage = new FSA(TextBoxServerAddress.Text);
+                MainWindow.Instance.NavigateToPage(newPage);
             }
         }
     }

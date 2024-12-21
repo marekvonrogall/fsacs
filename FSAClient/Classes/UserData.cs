@@ -11,17 +11,19 @@ namespace FSAClient.Classes
         public static IPAddress LocalIP { get; private set; }
         public static int LocalPort { get; private set; }
 
-        public static bool StoreUserData(string name, string localIP, string localPort)
+        public static bool IsValid { get; private set; }
+
+        public static void StoreUserData(string name, IPAddress localIp, int localPort)
         {
             try //VALIDATE INPUTS HERE!!! (NOT DONE YET)
             {
                 Name = name;
-                LocalIP = IPAddress.Parse(localIP);
-                LocalPort = Convert.ToInt32(localPort);
+                LocalIP = localIp;
+                LocalPort = localPort;
 
-                return true;
+                IsValid = true;
             }
-            catch { return false; }
+            catch { IsValid = false; }
         }
     }
 }
