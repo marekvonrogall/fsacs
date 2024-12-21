@@ -25,7 +25,7 @@ namespace FSAClient.Classes
         public void RegisterClient()
         {
             ws.Connect();
-            RegisterData registerData = new RegisterData(UserData.Name, UserData.PublicIP.ToString(), UserData.PublicPort);
+            RegisterData registerData = new RegisterData(UserData.Name, UserData.LocalIP.ToString(), UserData.LocalPort);
             string serializedClient = JsonSerializer.Serialize(registerData);
             string message = $"ClientRegistration;{serializedClient}";
             ws.Send(message);

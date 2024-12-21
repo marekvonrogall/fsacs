@@ -11,10 +11,6 @@
     <Grid Background="#FFE6EFED">
         <Label Content="Hallo!" HorizontalAlignment="Center" Margin="0,32,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI" FontSize="22" FontWeight="Bold"/>
         <Label Content="Netzwerk auswählen:" HorizontalAlignment="Left" Margin="113,94,0,0" VerticalAlignment="Top" FontFamily="Microsoft YaHei UI"/>
-        <TextBox x:Name="TextBoxPublicIP" HorizontalAlignment="Left" Margin="105,174,0,0" TextWrapping="Wrap" Text="---.---.---.---" VerticalAlignment="Top" Width="260"/>
-        <TextBox x:Name="TextBoxPublicPort" HorizontalAlignment="Left" Margin="390,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290"/>
-        <Label Content="Öffentliche IP-Adresse:" HorizontalAlignment="Left" Margin="104,148,0,0" VerticalAlignment="Top" Width="262"/>
-        <Label Content="Öffentliches Port:" HorizontalAlignment="Left" Margin="390,148,0,0" VerticalAlignment="Top" Width="110" RenderTransformOrigin="0.48,-0.427"/>
         <Label Content="Lokales Port:" HorizontalAlignment="Left" Margin="390,199,0,0" VerticalAlignment="Top" Width="110"/>
         <Label Content="Private IP-Adresse:" HorizontalAlignment="Left" Margin="104,199,0,0" VerticalAlignment="Top" Width="262"/>
         <TextBox x:Name="TextBoxLocalIP" HorizontalAlignment="Left" Margin="105,225,0,0" TextWrapping="Wrap" Text="---.---.---.---" VerticalAlignment="Top" Width="260" IsEnabled="False"/>
@@ -22,7 +18,6 @@
         <Button x:Name="ButtonFinishSetup" Content="Setup Abschliessen" HorizontalAlignment="Center" Margin="0,356,0,0" VerticalAlignment="Top" Width="574" Click="ButtonFinishSetup_Click"/>
         <Label Content="Client-Name:" HorizontalAlignment="Left" Margin="111,313,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="TextBoxName" HorizontalAlignment="Left" Margin="210,317,0,0" TextWrapping="Wrap" Text="Unnamed Client" VerticalAlignment="Top" Width="336"/>
-        <CheckBox x:Name="CheckBoxLocalMode" Content="Loklales Netzwerk" HorizontalAlignment="Left" Margin="571,318,0,0" VerticalAlignment="Top" Checked="CheckBoxLocalMode_Checked" Unchecked="CheckBoxLocalMode_Unchecked"/>
         <TextBox x:Name="TextBoxServerAddress" HorizontalAlignment="Center" Margin="0,279,0,0" TextWrapping="Wrap" Text="ws://" VerticalAlignment="Top" Width="574"/>
         <Label Content="Server-Address:" HorizontalAlignment="Left" Margin="110,253,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="ComboBoxNetworkInterfaces" HorizontalAlignment="Center" Margin="0,124,0,0" VerticalAlignment="Top" Width="574" Height="19" SelectionChanged="NetworkInterfaceChanged"/>

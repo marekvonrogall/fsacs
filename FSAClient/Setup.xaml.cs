@@ -12,9 +12,9 @@ namespace FSAClient
     /// </summary>
     public partial class Setup : Page
     {
-        private IPServices iPService = new IPServices();
         private PortServices portService = new PortServices();
         private NetworkInterfaces networkInterfaces = new NetworkInterfaces();
+        private bool localMode = true;
 
         public Setup()
         {
@@ -45,16 +45,9 @@ namespace FSAClient
 
         private void ButtonFinishSetup_Click(object sender, RoutedEventArgs e)
         {
-            if (CheckBoxLocalMode.IsChecked == true)
-            {
-                TextBoxPublicIP.Text = TextBoxLocalIP.Text;
-                TextBoxPublicPort.Text = TextBoxLocalPort.Text;
-            }
-
             try
             {
-                if (UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text,
-                        TextBoxPublicIP.Text, TextBoxPublicPort.Text))
+                if (UserData.StoreUserData(TextBoxName.Text, TextBoxLocalIP.Text, TextBoxLocalPort.Text))
                 {
                     var newPage = new FSA(TextBoxServerAddress.Text);
                     MainWindow.Instance.NavigateToPage(newPage);
@@ -65,18 +58,6 @@ namespace FSAClient
             {
                 MessageBox.Show("Ungültige Eingaben erkannt.", "Error");
             }
-        }
-
-        private void CheckBoxLocalMode_Checked(object sender, RoutedEventArgs e)
-        {
-            TextBoxPublicIP.IsEnabled = false;
-            TextBoxPublicPort.IsEnabled = false;
-        }
-
-        private void CheckBoxLocalMode_Unchecked(object sender, RoutedEventArgs e)
-        {
-            TextBoxPublicIP.IsEnabled = true;
-            TextBoxPublicPort.IsEnabled = true;
         }
     }
 }
