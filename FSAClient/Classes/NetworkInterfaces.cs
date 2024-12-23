@@ -13,6 +13,7 @@ namespace FSAClient.Classes
         public string Description { get; set; }
         public IPAddress Address { get; set; }
         public IPAddress BroadcastAddress { get; set; }
+        public string WebSocketAddress { get; set; }
 
         public void PopulateNetworkInterfaces(ComboBox ComboBoxNetworkInterfaces)
         {

@@ -17,10 +17,15 @@ namespace FSAClient
         public AvailableClient selectedClient;
         WebSocket ws;
 
-        public FSA(string externalServerAddress)
+        public FSA(string webSocketAddress)
         {
             InitializeComponent();
-            ws = new WebSocket(externalServerAddress);
+            EstablishWebsocketConnection(webSocketAddress);
+        }
+
+        private async void EstablishWebsocketConnection(string webSocketAddress)
+        {
+            ws = new WebSocket(webSocketAddress);
             serverCommunication = new ServerCommunication(ws, client, this);
             serverCommunication.RegisterClient();
         }

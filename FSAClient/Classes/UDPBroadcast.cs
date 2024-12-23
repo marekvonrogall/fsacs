@@ -3,6 +3,8 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace FSAClient.Classes
 {
@@ -21,19 +23,15 @@ namespace FSAClient.Classes
                     string message = "DISCOVER_WEBSOCKET_SERVER";
                     byte[] data = Encoding.UTF8.GetBytes(message);
 
-                    await udpClient.SendAsync(data, data.Length, endPoint);
-
                     using (UdpClient listener = new UdpClient(new IPEndPoint(selectedNetworkInterface.Address, 17550)))
                     {
+                        await udpClient.SendAsync(data, data.Length, endPoint);
                         listener.EnableBroadcast = true;
 
                         var receiveTask = listener.ReceiveAsync();
-                        var timeoutTask = Task.Delay(1000);
+                        var timeoutTask = Task.Delay(2000);
 
                         var completedTask = await Task.WhenAny(receiveTask, timeoutTask);
-
-                        listener.Close();
-                        listener.Dispose();
 
                         if (completedTask == timeoutTask)
                         {

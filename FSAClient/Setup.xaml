@@ -9,7 +9,7 @@
       Title="Setup">
 
     <Grid Background="#FFE6EFED">
-        <Label Content="Hallo!" HorizontalAlignment="Center" Margin="0,32,0,0" VerticalAlignment="Top" FontSize="22" FontWeight="Bold"/>
+        <Label Content="FSA" HorizontalAlignment="Left" Margin="353,28,0,0" VerticalAlignment="Top" FontSize="22" FontWeight="Bold" RenderTransformOrigin="0.388,0.535"/>
         <Label Content="Netzwerk auswählen:" HorizontalAlignment="Left" Margin="113,94,0,0" VerticalAlignment="Top"/>
         <Label Content="Lokales Port:" HorizontalAlignment="Left" Margin="390,174,0,0" VerticalAlignment="Top" Width="110"/>
         <Label Content="Private IP-Adresse:" HorizontalAlignment="Left" Margin="104,174,0,0" VerticalAlignment="Top" Width="262"/>
@@ -18,9 +18,9 @@
         <Button x:Name="ButtonFinishSetup" Content="Setup Abschliessen" HorizontalAlignment="Center" Margin="0,356,0,0" VerticalAlignment="Top" Width="574" Click="ButtonFinishSetup_Click"/>
         <Label Content="Client-Name:" HorizontalAlignment="Left" Margin="111,313,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="TextBoxName" HorizontalAlignment="Left" Margin="210,317,0,0" TextWrapping="Wrap" Text="Unnamed Client" VerticalAlignment="Top" Width="336"/>
-        <TextBox x:Name="TextBoxServerAddress" HorizontalAlignment="Center" Margin="0,259,0,0" TextWrapping="Wrap" Text="ws://" VerticalAlignment="Top" Width="574"/>
+        <TextBox x:Name="TextBoxServerAddress" HorizontalAlignment="Center" Margin="0,259,0,0" TextWrapping="Wrap" Text="ws://" VerticalAlignment="Top" Width="574" IsEnabled="False"/>
         <Label Content="Server-Address:" HorizontalAlignment="Left" Margin="110,233,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="ComboBoxNetworkInterfaces" HorizontalAlignment="Center" Margin="0,124,0,0" VerticalAlignment="Top" Width="574" Height="19" SelectionChanged="NetworkInterfaceChanged"/>
+        <ComboBox x:Name="ComboBoxNetworkInterfaces" HorizontalAlignment="Center" Margin="0,124,0,0" VerticalAlignment="Top" Width="574" Height="19"/>
         <Label x:Name="LabelNetworkInterfaceStatus" Content="Loading Network Interfaces..." HorizontalAlignment="Left" Margin="249,94,0,0" VerticalAlignment="Top"/>
 
     </Grid>

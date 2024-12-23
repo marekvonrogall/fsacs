@@ -11,7 +11,7 @@ namespace FSAClient
         {
             InitializeComponent();
             Instance = this;
-            NavigateToPage(new Setup());
+            new AutomaticSetup();
         }
        
         public void NavigateToPage(Page page)

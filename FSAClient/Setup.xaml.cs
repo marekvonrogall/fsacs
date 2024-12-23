@@ -17,27 +17,47 @@ namespace FSAClient
         private NetworkInterfaces networkInterfaces = new NetworkInterfaces();
         UDPBroadcast udpBroadcast = new UDPBroadcast();
 
+        public Label labelStatusMessage { get; set; }
+
         public Setup()
         {
-            InitializeComponent();
-            PopulateNetworkInterfaces();
+            //InitializeComponent();
         }
 
-        private async void PopulateNetworkInterfaces()
+        public async Task PopulateNetworkInterfaces()
         {
+            InitializeComponent();
             ComboBoxNetworkInterfaces.IsEnabled = false;
             networkInterfaces.PopulateNetworkInterfaces(ComboBoxNetworkInterfaces);
             await ValidateNetworkInterfaces(ComboBoxNetworkInterfaces.Items);
+        }
 
-            if (ComboBoxNetworkInterfaces.Items.Count != 0)
+        public async Task CheckValidNetworkInterfaces(Button buttonRetry, Button buttonManualSetup)
+        {
+            switch (ComboBoxNetworkInterfaces.Items.Count)
             {
-                ComboBoxNetworkInterfaces.SelectedIndex = 0;
-                ComboBoxNetworkInterfaces.IsEnabled = true;
-                LabelNetworkInterfaceStatus.Content = "Server found!";
-            }
-            else
-            {
-                LabelNetworkInterfaceStatus.Content = "There is no server running on your available networks...";
+                case 0: // NO SERVERS FOUND
+                    labelStatusMessage.Content = "FSA konnte keinen Server in ihrem Netzwerk finden.";
+                    buttonRetry.IsEnabled = true;
+                    buttonManualSetup.IsEnabled = true;
+                    break;
+                case 1: // ONE SERVER FOUND
+                    labelStatusMessage.Content = "Ein Server wurde in ihrem Netzwerk gefunden.";
+
+                    ComboBoxItem availableNetworkInterfaceItem = (ComboBoxItem)ComboBoxNetworkInterfaces.Items[0];
+                    NetworkInterfaces availableNetworkInterface = (NetworkInterfaces)availableNetworkInterfaceItem.Tag;
+
+                    await SetClientInfo(availableNetworkInterface.Address);
+
+                    var newPage = new FSA(availableNetworkInterface.WebSocketAddress);
+                    MainWindow.Instance.NavigateToPage(newPage);
+                    break;
+                default: //MULTIPLE SERVERS FOUND
+                    labelStatusMessage.Content = "Es wurden mehrere Server in ihren Netzwerken gefunden!";
+                    ComboBoxNetworkInterfaces.SelectedIndex = 0;
+                    ComboBoxNetworkInterfaces.IsEnabled = true;
+                    LabelNetworkInterfaceStatus.Content = "Server found!";
+                    break;
             }
         }
 
@@ -47,7 +67,8 @@ namespace FSAClient
             foreach (ComboBoxItem networkInterface in networkInterfaces)
             {
                 NetworkInterfaces ni = (NetworkInterfaces)networkInterface.Tag;
-                LabelNetworkInterfaceStatus.Content = $"Checking {ni.Name} - {ni.Description}...";
+
+                labelStatusMessage.Content = $"Checking Network Interface {ni.Name} - {ni.Description}...";
 
                 string serverAddress = await udpBroadcast.LookForServerAsync(ni);
                 int freeTCPPort = portService.GetFreeTcpPort(ni.Address);
@@ -56,6 +77,10 @@ namespace FSAClient
                 {
                     itemsToRemove.Add(networkInterface);
                 }
+                else
+                {
+                    ni.WebSocketAddress = serverAddress;
+                }
             }
             foreach (var item in itemsToRemove)
             {
@@ -63,24 +88,7 @@ namespace FSAClient
             }
         }
 
-        private async void CheckForWebsocket(NetworkInterfaces selectedNetworkInterface)
-        {
-            string serverAddress = await udpBroadcast.LookForServerAsync(selectedNetworkInterface);
-            if (serverAddress != "NO_SERVER_FOUND")
-            {
-                TextBoxServerAddress.Text = serverAddress;
-            }
-        }
-
-        private void NetworkInterfaceChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBoxItem selectedItem = (ComboBoxItem)ComboBoxNetworkInterfaces.SelectedItem;
-            NetworkInterfaces ni = (NetworkInterfaces)selectedItem.Tag;
-            CheckForWebsocket(ni);
-            SetClientInfo(ni.Address);
-        }
-
-        private void SetClientInfo(IPAddress clientIp)
+        private async Task SetClientInfo(IPAddress clientIp)
         {
             ButtonFinishSetup.IsEnabled = false;
             int clientTCPPort = portService.GetFreeTcpPort(clientIp);
@@ -107,7 +115,12 @@ namespace FSAClient
         {
             if (UserData.IsValid)
             {
-                var newPage = new FSA(TextBoxServerAddress.Text);
+                ComboBoxItem selectedNetworkInterfaceItem = (ComboBoxItem)ComboBoxNetworkInterfaces.SelectionBoxItem;
+                NetworkInterfaces selectedNetworkInterface = (NetworkInterfaces)selectedNetworkInterfaceItem.Tag;
+
+                SetClientInfo(selectedNetworkInterface.Address);
+
+                var newPage = new FSA(selectedNetworkInterface.WebSocketAddress);
                 MainWindow.Instance.NavigateToPage(newPage);
             }
         }
