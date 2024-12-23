@@ -33,15 +33,18 @@ namespace FSAClient
         private async void InitializeUI()
         {
             MainWindow.Instance.NavigateToPage(this);
+            ButtonRetry.IsEnabled = false;
+            ButtonManualSetup.IsEnabled = false;
+            LabelStatusMessage.Content = "Suche nach Servern in deinen Netzwerken...";
+
             await StartFSAClient();
         }
 
         private async Task StartFSAClient()
         {
-            ButtonRetry.IsEnabled = false;
-            ButtonManualSetup.IsEnabled = false;
-            LabelStatusMessage.Content = "Suche nach Servern in deinen Netzwerken...";
             setup.labelStatusMessage = LabelStatusMessage;
+            setup.comboBoxNetworkInterfaces = ComboBoxNetworkInterfaces;
+
             await setup.PopulateNetworkInterfaces();
             await setup.CheckValidNetworkInterfaces(ButtonRetry, ButtonManualSetup);
         }
@@ -49,6 +52,11 @@ namespace FSAClient
         private async void ButtonRetry_Click(object sender, RoutedEventArgs e)
         {
             await StartFSAClient();
+        }
+
+        private void ButtonManualSetup_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.NavigateToPage(new Setup());
         }
     }
 }

@@ -18,45 +18,39 @@ namespace FSAClient
         UDPBroadcast udpBroadcast = new UDPBroadcast();
 
         public Label labelStatusMessage { get; set; }
+        public ComboBox comboBoxNetworkInterfaces { get; set; }
 
         public Setup()
         {
-            //InitializeComponent();
+            InitializeComponent();
         }
 
         public async Task PopulateNetworkInterfaces()
         {
-            InitializeComponent();
-            ComboBoxNetworkInterfaces.IsEnabled = false;
-            networkInterfaces.PopulateNetworkInterfaces(ComboBoxNetworkInterfaces);
-            await ValidateNetworkInterfaces(ComboBoxNetworkInterfaces.Items);
+            comboBoxNetworkInterfaces.IsEnabled = false;
+            networkInterfaces.PopulateNetworkInterfaces(comboBoxNetworkInterfaces);
+            await ValidateNetworkInterfaces(comboBoxNetworkInterfaces.Items);
         }
 
         public async Task CheckValidNetworkInterfaces(Button buttonRetry, Button buttonManualSetup)
         {
-            switch (ComboBoxNetworkInterfaces.Items.Count)
+            switch (comboBoxNetworkInterfaces.Items.Count)
             {
-                case 0: // NO SERVERS FOUND
+                case 0: // NO SERVERS FOUND --> ENABLE MANUAL SETUP
                     labelStatusMessage.Content = "FSA konnte keinen Server in ihrem Netzwerk finden.";
                     buttonRetry.IsEnabled = true;
                     buttonManualSetup.IsEnabled = true;
                     break;
                 case 1: // ONE SERVER FOUND
                     labelStatusMessage.Content = "Ein Server wurde in ihrem Netzwerk gefunden.";
-
-                    ComboBoxItem availableNetworkInterfaceItem = (ComboBoxItem)ComboBoxNetworkInterfaces.Items[0];
-                    NetworkInterfaces availableNetworkInterface = (NetworkInterfaces)availableNetworkInterfaceItem.Tag;
-
-                    await SetClientInfo(availableNetworkInterface.Address);
-
-                    var newPage = new FSA(availableNetworkInterface.WebSocketAddress);
-                    MainWindow.Instance.NavigateToPage(newPage);
+                    MainWindow.Instance.NavigateToPage(new Username(this));
+                    
                     break;
                 default: //MULTIPLE SERVERS FOUND
                     labelStatusMessage.Content = "Es wurden mehrere Server in ihren Netzwerken gefunden!";
-                    ComboBoxNetworkInterfaces.SelectedIndex = 0;
-                    ComboBoxNetworkInterfaces.IsEnabled = true;
-                    LabelNetworkInterfaceStatus.Content = "Server found!";
+                    comboBoxNetworkInterfaces.SelectedIndex = 0;
+                    comboBoxNetworkInterfaces.IsEnabled = true;
+                    // MÖGLICHKEIT ButtonFinishSetup_Click aus AUTOMATED SETUP AUSZUFÜHREN!
                     break;
             }
         }
@@ -84,45 +78,31 @@ namespace FSAClient
             }
             foreach (var item in itemsToRemove)
             {
-                ComboBoxNetworkInterfaces.Items.Remove(item);
+                comboBoxNetworkInterfaces.Items.Remove(item);
             }
         }
 
-        private async Task SetClientInfo(IPAddress clientIp)
+        private async Task SetClientInfo(IPAddress clientIp, string username)
         {
-            ButtonFinishSetup.IsEnabled = false;
             int clientTCPPort = portService.GetFreeTcpPort(clientIp);
             if (clientTCPPort != 0)
             {
-                UserData.StoreUserData(TextBoxName.Text, clientIp, clientTCPPort);
-
-                if (UserData.IsValid)
-                {
-                    TextBoxLocalIP.Text = UserData.LocalIP.ToString();
-                    TextBoxLocalPort.Text = UserData.LocalPort.ToString();
-                    ButtonFinishSetup.IsEnabled = true;
-                }
-                else
-                {
-                    TextBoxLocalIP.Text = string.Empty;
-                    TextBoxLocalPort.Text = string.Empty;
-                    MessageBox.Show("Try using a different network interface.", "Network Interface Error");
-                }
+                UserData.StoreUserData(username, clientIp, clientTCPPort);
             }
         }
 
-        private void ButtonFinishSetup_Click(object sender, RoutedEventArgs e)
+        public async Task FinishSetup(string username)
         {
+            ComboBoxItem availableNetworkInterfaceItem = (ComboBoxItem)comboBoxNetworkInterfaces.Items[0];
+            NetworkInterfaces availableNetworkInterface = (NetworkInterfaces)availableNetworkInterfaceItem.Tag;
+
+            await SetClientInfo(availableNetworkInterface.Address, username);
+
             if (UserData.IsValid)
             {
-                ComboBoxItem selectedNetworkInterfaceItem = (ComboBoxItem)ComboBoxNetworkInterfaces.SelectionBoxItem;
-                NetworkInterfaces selectedNetworkInterface = (NetworkInterfaces)selectedNetworkInterfaceItem.Tag;
-
-                SetClientInfo(selectedNetworkInterface.Address);
-
-                var newPage = new FSA(selectedNetworkInterface.WebSocketAddress);
-                MainWindow.Instance.NavigateToPage(newPage);
+                MainWindow.Instance.NavigateToPage(new FSA(availableNetworkInterface.WebSocketAddress));
             }
+            else MessageBox.Show("Ein Fehler ist aufgetreten.");
         }
     }
 }
