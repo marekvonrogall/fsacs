@@ -47,7 +47,7 @@ namespace FSAClient
             setup.comboBoxNetworkInterfaces = ComboBoxNetworkInterfaces;
 
             await setup.PopulateNetworkInterfaces();
-            await setup.CheckValidNetworkInterfaces(ButtonRetry, ButtonManualSetup);
+            await setup.CheckValidNetworkInterfaces(ButtonRetry, ButtonManualSetup, ButtonUseNetwork);
         }
 
         private async void ButtonRetry_Click(object sender, RoutedEventArgs e)
@@ -59,6 +59,11 @@ namespace FSAClient
         {
             //ADD PAGE ManualSetup
             //MainWindow.Instance.NavigateToPage(new ManualSetup());
+        }
+
+        private void ButtonUseNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.NavigateToPage(new Username(setup));
         }
     }
 }

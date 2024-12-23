@@ -10,12 +10,13 @@
 
     <Grid Background="#FFFFFBF7">
         <Label Content="" HorizontalAlignment="Left" Margin="262,80,0,0" VerticalAlignment="Top"/>
-        <Label Content="Automatisches Setup" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Content="Bitte warten..." HorizontalAlignment="Center" Margin="0,111,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="18"/>
+        <Label Content="Verfügbare Netzwerke:" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="Automatisches Setup" HorizontalAlignment="Center" Margin="0,111,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="18"/>
         <Label x:Name="LabelStatusMessage" Content="{}{Status Message}" HorizontalAlignment="Center" Margin="0,312,0,0" VerticalAlignment="Top"/>
         <Button x:Name="ButtonRetry" Content="Erneut Versuchen" HorizontalAlignment="Left" Margin="266,364,0,0" VerticalAlignment="Top" Width="129" IsEnabled="False" Click="ButtonRetry_Click"/>
         <Button x:Name="ButtonManualSetup" Content="Manuelles Setup" HorizontalAlignment="Left" Margin="405,364,0,0" VerticalAlignment="Top" Width="129" IsEnabled="False" Click="ButtonManualSetup_Click"/>
-        <ComboBox x:Name="ComboBoxNetworkInterfaces" HorizontalAlignment="Center" Margin="0,259,0,0" VerticalAlignment="Top" Width="574" Height="19"/>
+        <ComboBox x:Name="ComboBoxNetworkInterfaces" HorizontalAlignment="Left" Margin="126,256,0,0" VerticalAlignment="Top" Width="431" Height="19" IsEnabled="False"/>
+        <Button x:Name="ButtonUseNetwork" Content="Benutzen" HorizontalAlignment="Left" Margin="576,256,0,0" VerticalAlignment="Top" Height="19" Width="98" IsEnabled="False" Click="ButtonUseNetwork_Click"/>
 
     </Grid>
 </Page>

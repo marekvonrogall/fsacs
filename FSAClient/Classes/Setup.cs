@@ -26,7 +26,7 @@ namespace FSAClient.Classes
             await ValidateNetworkInterfaces(comboBoxNetworkInterfaces.Items);
         }
 
-        public async Task CheckValidNetworkInterfaces(Button buttonRetry, Button buttonManualSetup)
+        public async Task CheckValidNetworkInterfaces(Button buttonRetry, Button buttonManualSetup, Button buttonUseNetwork)
         {
             switch (comboBoxNetworkInterfaces.Items.Count)
             {
@@ -37,14 +37,14 @@ namespace FSAClient.Classes
                     break;
                 case 1: // ONE SERVER FOUND
                     labelStatusMessage.Content = "Ein Server wurde in ihrem Netzwerk gefunden.";
+                    comboBoxNetworkInterfaces.SelectedIndex = 0;
                     MainWindow.Instance.NavigateToPage(new Username(this));
-
                     break;
                 default: //MULTIPLE SERVERS FOUND
                     labelStatusMessage.Content = "Es wurden mehrere Server in ihren Netzwerken gefunden!";
                     comboBoxNetworkInterfaces.SelectedIndex = 0;
                     comboBoxNetworkInterfaces.IsEnabled = true;
-                    // MÖGLICHKEIT ButtonFinishSetup_Click aus AUTOMATED SETUP AUSZUFÜHREN!
+                    buttonUseNetwork.IsEnabled = true;
                     break;
             }
         }
@@ -87,16 +87,23 @@ namespace FSAClient.Classes
 
         public async Task FinishSetup(string username)
         {
-            ComboBoxItem availableNetworkInterfaceItem = (ComboBoxItem)comboBoxNetworkInterfaces.Items[0];
-            NetworkInterfaces availableNetworkInterface = (NetworkInterfaces)availableNetworkInterfaceItem.Tag;
-
-            await SetClientInfo(availableNetworkInterface.Address, username);
-
-            if (UserData.IsValid)
+            try
             {
-                MainWindow.Instance.NavigateToPage(new FSA(availableNetworkInterface.WebSocketAddress));
+                ComboBoxItem selectedNetworkInterfaceItem = (ComboBoxItem)comboBoxNetworkInterfaces.SelectedItem;
+                NetworkInterfaces selectedNetworkInterface = (NetworkInterfaces)selectedNetworkInterfaceItem.Tag;
+
+                await SetClientInfo(selectedNetworkInterface.Address, username);
+
+                if (UserData.IsValid)
+                {
+                    MainWindow.Instance.NavigateToPage(new FSA(selectedNetworkInterface.WebSocketAddress));
+                }
+                else throw new Exception();
             }
-            else MessageBox.Show("Ein Fehler ist aufgetreten.");
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
