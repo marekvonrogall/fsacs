@@ -4,14 +4,13 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using FSAClient.Classes;
 
-namespace FSAClient
+namespace FSAClient.Classes
 {
     /// <summary>
     /// Interaction logic for Setup.xaml
     /// </summary>
-    public partial class Setup : Page
+    public partial class Setup
     {
         private PortServices portService = new PortServices();
         private NetworkInterfaces networkInterfaces = new NetworkInterfaces();
@@ -19,11 +18,6 @@ namespace FSAClient
 
         public Label labelStatusMessage { get; set; }
         public ComboBox comboBoxNetworkInterfaces { get; set; }
-
-        public Setup()
-        {
-            InitializeComponent();
-        }
 
         public async Task PopulateNetworkInterfaces()
         {
@@ -44,7 +38,7 @@ namespace FSAClient
                 case 1: // ONE SERVER FOUND
                     labelStatusMessage.Content = "Ein Server wurde in ihrem Netzwerk gefunden.";
                     MainWindow.Instance.NavigateToPage(new Username(this));
-                    
+
                     break;
                 default: //MULTIPLE SERVERS FOUND
                     labelStatusMessage.Content = "Es wurden mehrere Server in ihren Netzwerken gefunden!";

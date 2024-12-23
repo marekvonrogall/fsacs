@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using FSAClient.Classes;
 
 namespace FSAClient
 {
@@ -56,7 +57,8 @@ namespace FSAClient
 
         private void ButtonManualSetup_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.NavigateToPage(new Setup());
+            //ADD PAGE ManualSetup
+            //MainWindow.Instance.NavigateToPage(new ManualSetup());
         }
     }
 }
