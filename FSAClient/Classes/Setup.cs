@@ -28,20 +28,22 @@ namespace FSAClient.Classes
 
         public async Task CheckValidNetworkInterfaces(Button buttonRetry, Button buttonManualSetup, Button buttonUseNetwork)
         {
+            buttonRetry.IsEnabled = true;
+            buttonManualSetup.IsEnabled = true;
+
             switch (comboBoxNetworkInterfaces.Items.Count)
             {
                 case 0: // NO SERVERS FOUND --> ENABLE MANUAL SETUP
-                    labelStatusMessage.Content = "FSA konnte keinen Server in ihrem Netzwerk finden.";
-                    buttonRetry.IsEnabled = true;
-                    buttonManualSetup.IsEnabled = true;
+                    labelStatusMessage.Content = "Es konnten keine Server gefunden werden.";
                     break;
+                /*
                 case 1: // ONE SERVER FOUND
                     labelStatusMessage.Content = "Ein Server wurde in ihrem Netzwerk gefunden.";
                     comboBoxNetworkInterfaces.SelectedIndex = 0;
                     MainWindow.Instance.NavigateToPage(new Username(this));
-                    break;
-                default: //MULTIPLE SERVERS FOUND
-                    labelStatusMessage.Content = "Es wurden mehrere Server in ihren Netzwerken gefunden!";
+                    break;*/
+                default: //AT LEAST 1 SERVER HAS BEEN FOUND
+                    labelStatusMessage.Content = "FSAServer gefunden!";
                     comboBoxNetworkInterfaces.SelectedIndex = 0;
                     comboBoxNetworkInterfaces.IsEnabled = true;
                     buttonUseNetwork.IsEnabled = true;

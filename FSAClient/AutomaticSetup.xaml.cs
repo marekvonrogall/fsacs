@@ -52,6 +52,7 @@ namespace FSAClient
 
         private async void ButtonRetry_Click(object sender, RoutedEventArgs e)
         {
+            ComboBoxNetworkInterfaces.Items.Clear();
             await StartFSAClient();
         }
 
