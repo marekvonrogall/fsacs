@@ -23,7 +23,7 @@ namespace FSAClient
             EstablishWebsocketConnection(webSocketAddress);
         }
 
-        private async void EstablishWebsocketConnection(string webSocketAddress)
+        private void EstablishWebsocketConnection(string webSocketAddress)
         {
             ws = new WebSocket(webSocketAddress);
             serverCommunication = new ServerCommunication(ws, client, this);

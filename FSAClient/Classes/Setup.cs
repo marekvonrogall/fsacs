@@ -26,7 +26,7 @@ namespace FSAClient.Classes
             await ValidateNetworkInterfaces(comboBoxNetworkInterfaces.Items);
         }
 
-        public async Task CheckValidNetworkInterfaces(Button buttonRetry, Button buttonManualSetup, Button buttonUseNetwork)
+        public Task CheckValidNetworkInterfaces(Button buttonRetry, Button buttonManualSetup, Button buttonUseNetwork)
         {
             buttonRetry.IsEnabled = true;
             buttonManualSetup.IsEnabled = true;
@@ -49,6 +49,8 @@ namespace FSAClient.Classes
                     buttonUseNetwork.IsEnabled = true;
                     break;
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task ValidateNetworkInterfaces(ItemCollection networkInterfaces)
@@ -78,16 +80,17 @@ namespace FSAClient.Classes
             }
         }
 
-        private async Task SetClientInfo(IPAddress clientIp, string username)
+        private Task SetClientInfo(IPAddress clientIp, string username)
         {
             int clientTCPPort = portService.GetFreeTcpPort(clientIp);
             if (clientTCPPort != 0)
             {
                 UserData.StoreUserData(username, clientIp, clientTCPPort);
             }
+            return Task.CompletedTask;
         }
 
-        public async Task FinishSetup(string username)
+        public async void FinishSetup(string username)
         {
             try
             {

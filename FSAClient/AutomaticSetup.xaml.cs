@@ -1,20 +1,7 @@
 ﻿using FSAClient.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using FSAClient.Classes;
 
 namespace FSAClient
 {
@@ -29,16 +16,15 @@ namespace FSAClient
         {
             InitializeComponent();
             InitializeUI();
+            StartFSAClient();
         }
 
-        private async void InitializeUI()
+        private void InitializeUI()
         {
             MainWindow.Instance.NavigateToPage(this);
             ButtonRetry.IsEnabled = false;
             ButtonManualSetup.IsEnabled = false;
             LabelStatusMessage.Content = "Suche nach Servern in deinen Netzwerken...";
-
-            await StartFSAClient();
         }
 
         private async Task StartFSAClient()
@@ -50,10 +36,10 @@ namespace FSAClient
             await setup.CheckValidNetworkInterfaces(ButtonRetry, ButtonManualSetup, ButtonUseNetwork);
         }
 
-        private async void ButtonRetry_Click(object sender, RoutedEventArgs e)
+        private void ButtonRetry_Click(object sender, RoutedEventArgs e)
         {
             ComboBoxNetworkInterfaces.Items.Clear();
-            await StartFSAClient();
+            StartFSAClient();
         }
 
         private void ButtonManualSetup_Click(object sender, RoutedEventArgs e)
